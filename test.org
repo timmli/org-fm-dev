@@ -1,0 +1,57 @@
+* Minutes                                                           :minutes:
+
+#+EXPORT_FILE_NAME: minutes-DRAFT.pdf
+
+#+MINUTES-TITLE: Minutes
+#+MINUTES-EVENT: Some event
+#+MINUTES-PLACE: Some place
+#+MINUTES-DATE: 01.07.2019, 12:15--13:45
+#+MINUTES-AUTHOR: John Doe
+#+MINUTES-CHAIR: Sue Parker
+#+MINUTES-DRAFT: Draft
+#+MINUTES-STYLE: plain-minutes-style.tex
+
+#+LATEX_HEADER: \usepackage{draftwatermark}
+# #+LATEX_HEADER: \usepackage[nostamp]{draftwatermark} 
+#+LATEX_HEADER: \SetWatermarkText{Draft}
+#+LATEX_HEADER: \SetWatermarkScale{2} 
+
+:LATEX:
+#+OPTIONS: toc:nil title:nil author:nil date:nil
+#+LATEX_HEADER: \input{plain-minutes-style.tex}
+:END:
+
+#+LATEX: {\LARGE
+*Protokoll*
+#+LATEX:  \\[1ex]}
+
+*Event:* Some Meeting
+
+*Place:* Some Place
+
+*Date:* 01.07.2019, 12:15--13:45
+
+*Minute keeper:* John Doe
+
+*Participants:*
+
+#+LATEX: \bigskip
+#+LATEX: \begin{tabular}{ll}
+#+LATEX: \begin{minipage}[t]{0.45\textwidth}
+- [X] John Doe
+- [ ] Peter Smith
+- [X] Kim Miller
+#+LATEX: \end{minipage}
+#+LATEX: \end{tabular}
+#+LATEX: \bigskip
+
+*Chair:* Sue Parker
+
+-----
+
+1) John :: TOP 1
+       - A: Peter :: Something to do.
+       - E: :: Decision made
+2) Second TOP
+       - I: Sue :: Some information
+       - C: :: Cleared item 

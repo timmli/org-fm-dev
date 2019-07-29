@@ -1,0 +1,6 @@
+
+* org-minutes
+
+- [ ] add special fields (=#+Minutes_Title=, ...)
+- [ ] activate faces only in headings with minutes?
+- [ ] regression in PDF bookmarks
