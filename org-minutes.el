@@ -1,4 +1,4 @@
-(defun tl/org-drawer-delete (name)
+(defun org-drawer-delete (name)
   "Delete all drawers in buffer with title NAME.
 Inspired by: https://emacs.stackexchange.com/a/38367/12336
 "
@@ -14,16 +14,88 @@ Inspired by: https://emacs.stackexchange.com/a/38367/12336
 			(delete-region (region-beginning) (region-end))
 			(org-remove-empty-drawer-at (point)))))
 
-(defun tl/org-minutes-make-regexp (cat)
-	(concat
-	 "^\\([[:blank:]]*\\)\\([0-9]+\)\\|-\\)[[:blank:]]+\\(\\("
-	 cat
-	 "\\)[[:blank:]]*\\(.*?\\)[[:blank:]]+\\(::\\|||\\)\\)"))
-
-(defvar tl/org-minutes-question-regexp
+(defvar org-minutes-question-regexp
 	"\\(\\?\\(:\\||\\)\\)\\(.*?\\)\\(\\(:\\||\\)\\?\\)")
 
-(defun tl/org-minutes-export ()
+(defun org-minutes-clean-heading ()
+	"Clean up current heading"
+	(org-drawer-delete "LOGBOOK")					; remove LOGBOOK
+	(org-drawer-delete "PROPERTIES")			; remove PROPERTIES
+	(org-deadline '(4))										; remove DEADLINE
+	(org-schedule '(4))										; remove SCHEDULE
+	;; remove root heading
+	(org-back-to-heading)
+	(org-show-subtree)
+	(kill-line)
+	)
+
+(defun org-minutes-replace-questions-with-latex ()
+	"Replace all open questions with LaTeX command \OpenQuestion."
+	(while (re-search-forward org-minutes-question-regexp nil t)
+		(replace-match
+		 (let ((scope (match-string 3)))
+			 (concat "@@latex:\\\\OpenQuestion{@@" scope "@@latex:}@@")))))
+
+(defun org-minutes-replace-tags-with-latex ()
+	"Replace all item tags with appropriate LaTeX commands."
+	(while (re-search-forward "^\\([[:blank:]]*\\)\\([0-9]+\)\\|-\\)[[:blank:]]+\\(A:\\|C:\\|E:\\|D:\\|I:\\|\\[ \\]\\)?[[:blank:]]*\\(.*?\\)[[:blank:]]+\\(::\\|||\\)" nil t)
+		(replace-match
+		 (let ((indentation (match-string 1))
+					 (mark (match-string 2))
+					 (cat (match-string 3))
+					 (name (match-string 4))
+					 (separator (match-string 5)))
+			 (if (string= indentation "") 
+					 (concat "* " 					; no indentation
+									 (if (stringp name)
+											 (concat " @@latex:\\\\InformationTagMargin{@@"
+															 name "@@latex:}@@")))
+				 (concat indentation mark ; with identation
+								 (cond ((or (string= cat "A:") (string= cat "[ ]"))
+												(concat " @@latex:\\\\ActionTag@@"))
+											 ((string= cat "C:")
+												(concat " @@latex:\\\\ClearedTag@@"))
+											 ((string= cat "E:")
+												(concat " @@latex:\\\\EntscheidungTag@@"))
+											 ((string= cat "D:")
+												(concat " @@latex:\\\\DecisionTag@@"))
+											 ((string= cat "I:")
+												(concat " @@latex:\\\\InformationTag@@"))
+											 )
+								 (concat "@@latex:{@@" name "@@latex:}@@"
+												 "@@latex:{@@" separator "@@latex:}@@")
+								 (cond ((or (string= cat "A:") (string= cat "[ ]"))
+												(concat " @@latex:\\\\ActionTagMargin@@@@latex:{@@"
+																name
+																"@@latex:}@@"))
+											 ((string= cat "C:")
+												(concat " @@latex:\\\\ClearedTagMargin@@@@latex:{@@ "
+																name
+																"@@latex:}@@"))
+											 ((string= cat "E:")
+												(concat " @@latex:\\\\EntscheidungTagMargin@@@@latex:{@@ "
+																name
+																"@@latex:}@@"))
+											 ((string= cat "D:")
+												(concat " @@latex:\\\\DecisionTagMargin@@@@latex:{@@ "
+																name
+																"@@latex:}@@"))
+											 ((string= cat "I:")
+												(concat " @@latex:\\\\InformationTagMargin@@@@latex:{@@ "
+																name
+																"@@latex:}@@")))))) 
+		 t ))	; fixed case	
+	)
+
+(defun org-minutes-replace-untagged-with-latex ()
+	"Replace all untagged topics with appropriate LaTeX commands."
+	(while (re-search-forward "^[0-9]+\) " nil t)
+		(replace-match "* ")))
+
+(defun org-minutes-replace-document-attributes-with-latex ()
+	)
+
+(defun org-minutes-export ()
 	(interactive)
 	(save-excursion
 		(progn
@@ -37,66 +109,21 @@ Inspired by: https://emacs.stackexchange.com/a/38367/12336
 			(let ((buffer (buffer-name)))
 				(switch-to-buffer "*Minutes*")
 				(org-mode)
-				(tl/org-drawer-delete "LOGBOOK")
-				(tl/org-drawer-delete "PROPERTIES")
-				(org-deadline '(4))
-				(org-schedule '(4))
-				(org-back-to-heading)
-				(org-show-subtree)
-				(kill-line)
-				;; open questions
+				;; clean up root heading
+				(org-minutes-clean-heading)
+				;; TODO: process document attributes
 				(beginning-of-buffer)
-				(while (re-search-forward tl/org-minutes-question-regexp nil t)
-					(replace-match
-					 (let ((scope (match-string 3)))
-						 (concat "@@latex:\\\\colorbox{orange}{?}{\\\\color{orange}" scope "}@@"))))
-				;; tagged items
+				(org-minutes-replace-document-attributes-with-latex)
+				;; process open questions
 				(beginning-of-buffer)
-				(while (re-search-forward "^\\([[:blank:]]*\\)\\([0-9]+\)\\|-\\)[[:blank:]]+\\(A:\\|C:\\|E:\\|D:\\|I:\\|\\[ \\]\\)?[[:blank:]]*\\(.*?\\)[[:blank:]]+\\(::\\|||\\)" nil t)
-					(replace-match
-					 (let ((indentation (match-string 1))
-								 (mark (match-string 2))
-								 (cat (match-string 3))
-								 (name (match-string 4))
-								 (separator (match-string 5)))
-						 (if (string= indentation "") 
-								 (concat "* " 					; no indentation
-												 (if (and (stringp name))
-														 (concat " @@latex:\\\\protect\\\\marginpar{\\\\colorbox{blue!20}{I}@@ "
-																		 name "@@latex:}@@")))
-							 (concat indentation mark ; with identation
-											 (cond ((or (string= cat "A:") (string= cat "[ ]"))
-															(concat " @@latex:\\\\colorbox{red}{A}@@"))
-														 ((string= cat "C:")
-															(concat " @@latex:\\\\colorbox{green!20!black}{C}@@"))
-														 ((string= cat "E:")
-															(concat " @@latex:\\\\colorbox{green}{E}@@"))
-														 ((string= cat "D:")
-															(concat " @@latex:\\\\colorbox{green}{D}@@"))
-														 ((string= cat "I:")
-															(concat " @@latex:\\\\colorbox{blue!20}{I}@@"))
-														 )
-											 (concat " " name " " "$" separator "$")
-											 (cond ((or (string= cat "A:") (string= cat "[ ]"))
-															(concat " @@latex:\\\\marginpar{\\\\colorbox{red}{A}@@ "
-																			name "@@latex:}@@"))
-														 ((string= cat "C:")
-															(concat " @@latex:\\\\marginpar{\\\\colorbox{green!20!black}{C}@@ "
-																			name "@@latex:}@@"))
-														 ((string= cat "E:")
-															(concat " @@latex:\\\\marginpar{\\\\colorbox{green}{E}@@ "
-																			name "@@latex:}@@"))
-														 ((string= cat "D:")
-															(concat " @@latex:\\\\marginpar{\\\\colorbox{green}{D}@@ "
-																			name "@@latex:}@@"))
-														 ((string= cat "I:")
-															(concat " @@latex:\\\\marginpar{\\\\colorbox{blue!20}{I}@@ "
-																			name "@@latex:}@@")))))) 
-					 t ))	; fixed case
-				;; untagged topics
+				(org-minutes-replace-questions-with-latex)
+				;; process tagged items
 				(beginning-of-buffer)
-				(while (re-search-forward "^[0-9]+\) " nil t)
-					(replace-match "* "))
+				(org-minutes-replace-tags-with-latex)
+				;; process untagged topics
+				(beginning-of-buffer)
+				(org-minutes-replace-untagged-with-latex)
+				;; dispatch export and go back to original buffer
 				(deactivate-mark)
 				(org-export-dispatch)
 				(switch-to-buffer buffer)
