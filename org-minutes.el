@@ -92,7 +92,43 @@ Inspired by: https://emacs.stackexchange.com/a/38367/12336
 	(while (re-search-forward "^[0-9]+\) " nil t)
 		(replace-match "* ")))
 
-(defun org-minutes-replace-document-attributes-with-latex ()
+(defconst org-minutes-keywords-alist
+	'(("MINUTES-AUTHOR" "\\author")
+		("MINUTES-DATE" "\\date"))
+	"ORG-MINUTES-KEYWORDS-ALIST contains a mapping from org-minutes keywords to LaTeX commands.
+The order in ORG-MINUTES-KEYWORDS-ALIST determines the order of the LaTeX header.")
+
+(defun org-minutes-convert-keywords-to-latex ()
+	"Collect all #+MINUTES keywords and convert them to LaTeX commands."
+	(goto-char (point-min))
+	(let ((keyword-alist-input org-minutes-keywords-alist)
+				(keyword-alist-output))
+		(while (re-search-forward "\\#\\+MINUTES" nil t)
+			(let* ((element-key (org-element-property :key (org-element-at-point)))
+						 (element-value (org-element-property :value (org-element-at-point))))
+				(when (assoc element-key keyword-alist-input)
+					(add-to-list 'keyword-alist-output
+											 `(,element-key
+												 ,(concat "#+LATEX: "
+																	(car (cdr (assoc element-key keyword-alist-input)))
+																	"{"
+																	"\n"
+																	element-value
+																	"\n"
+																	"#+LATEX:}"))
+											 ))))
+		keyword-alist-output
+		)
+	)
+
+(defun org-minutes-insert-latex-header (keyword-latex-alist)
+	""
+	(goto-char (point-min)) 
+	(end-of-line)
+	(newline)
+	(loop-for-each key (mapcar 'car org-minutes-keywords-alist)
+		(when (assoc key keyword-latex-alist)
+			(insert (car (cdr (assoc key keyword-latex-alist))))))
 	)
 
 (defun org-minutes-export ()
