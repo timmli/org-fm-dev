@@ -92,43 +92,87 @@ Inspired by: https://emacs.stackexchange.com/a/38367/12336
 	(while (re-search-forward "^[0-9]+\) " nil t)
 		(replace-match "* ")))
 
-(defconst org-minutes-keywords-alist
-	'(("MINUTES-AUTHOR" "\\author")
-		("MINUTES-DATE" "\\date"))
+(defconst org-minutes-keywords-latex-alist
+	'(("MINUTES_TITLE" "#+TITLE: ###")
+		("MINUTES_AUTHOR" "#+AUTHOR: ###")
+		("MINUTES_LATEX_STYLE" "#+LATEX_HEADER: \\input{###}")
+		("MINUTES_CHAIR" "#+LATEX_HEADER: \\chair{###}")
+		("MINUTES_EVENT" "#+LATEX_HEADER: \\event{###}")
+		("MINUTES_PLACE" "#+LATEX_HEADER: \\place{###}")
+		("MINUTES_PARTICIPANTS" "#+LATEX_HEADER: \\participants{###}")
+		("MINUTES_DATE" "#+DATE: ###")
+		("MINUTES_DRAFT_TEXT" "#+LATEX_HEADER: \\SetWatermarkText{###}")
+		("MINUTES_OPTIONS" "#+OPTIONS: ###")
+		)
 	"ORG-MINUTES-KEYWORDS-ALIST contains a mapping from org-minutes keywords to LaTeX commands.
-The order in ORG-MINUTES-KEYWORDS-ALIST determines the order of the LaTeX header.")
+The order in ORG-MINUTES-KEYWORDS-ALIST determines the order of the inserted LaTeX header.")
 
-(defun org-minutes-convert-keywords-to-latex ()
+(defun org-minutes-convert-keywords ()
 	"Collect all #+MINUTES keywords and convert them to LaTeX commands."
 	(goto-char (point-min))
-	(let ((keyword-alist-input org-minutes-keywords-alist)
+	(let ((keyword-alist-input org-minutes-keywords-latex-alist)
 				(keyword-alist-output))
 		(while (re-search-forward "\\#\\+MINUTES" nil t)
 			(let* ((element-key (org-element-property :key (org-element-at-point)))
 						 (element-value (org-element-property :value (org-element-at-point))))
-				(when (assoc element-key keyword-alist-input)
-					(add-to-list 'keyword-alist-output
-											 `(,element-key
-												 ,(concat "#+LATEX: "
-																	(car (cdr (assoc element-key keyword-alist-input)))
-																	"{"
-																	"\n"
-																	element-value
-																	"\n"
-																	"#+LATEX:}"))
-											 ))))
+				(when (assoc element-key keyword-alist-input) 
+					(let ((keyword-alist-input-value (car (cdr (assoc element-key keyword-alist-input)))))
+						(add-to-list 'keyword-alist-output
+												 `(,element-key
+													 ,(if (string-match "###" keyword-alist-input-value)
+																(concat
+																 (replace-match element-value nil t keyword-alist-input-value)
+																 "\n")
+															(concat 
+															 keyword-alist-input-value
+															 element-value
+															 "\n")))
+												 )))))
 		keyword-alist-output
-		)
-	)
+		))
+
+(defun org-minutes-convert-participants-list ()
+	"TODO"
+	(save-excursion
+		(if (re-search-forward ":PARTICIPANTS-LIST:" nil t)
+				(progn (forward-line 1)
+							 (beginning-of-line)
+							 (if (eq (car (org-element-at-point)) 'plain-list)
+									 (replace-regexp-in-string "\n" "" (org-list-to-latex (org-list-to-lisp)))
+								 ""))
+			""
+			)))
 
 (defun org-minutes-insert-latex-header (keyword-latex-alist)
 	""
-	(goto-char (point-min)) 
-	(end-of-line)
-	(newline)
-	(loop-for-each key (mapcar 'car org-minutes-keywords-alist)
+	(progn 										 ; move to top of buffer and create a new line
+		(goto-char (point-min)) 
+		(end-of-line)
+		(newline))
+	(loop-for-each key (mapcar 'car org-minutes-keywords-latex-alist)
 		(when (assoc key keyword-latex-alist)
 			(insert (car (cdr (assoc key keyword-latex-alist))))))
+	(insert
+	 (let ((participants-list (org-minutes-convert-participants-list))
+				 (keyword-latex (car (cdr (assoc "MINUTES_PARTICIPANTS" org-minutes-keywords-latex-alist)))))
+		 ;;;; This is a hack
+		 ;; (concat
+		 ;; 	"#+BEGIN_EXPORT latex: \n \\participants{"
+		 ;; 	participants-list
+		 ;; 	"}\n#+END_EXPORT"
+		 ;; 	)
+		 ;;;; This does not work because keyword-latex contains line breaks:
+		 (when (string-match "###"
+		 										 keyword-latex)
+		 	 (concat
+		 		(replace-match participants-list
+		 									 nil t
+		 									 keyword-latex)
+		 		"\n"
+		 		)
+		 	 )
+		 ))
+	(org-drawer-delete "PARTICIPANTS-LIST") ; FIXME: should be moved elsewhere
 	)
 
 (defun org-minutes-export ()
@@ -147,9 +191,9 @@ The order in ORG-MINUTES-KEYWORDS-ALIST determines the order of the LaTeX header
 				(org-mode)
 				;; clean up root heading
 				(org-minutes-clean-heading)
-				;; TODO: process document attributes
+				;; process document attributes
 				(beginning-of-buffer)
-				(org-minutes-replace-document-attributes-with-latex)
+				(org-minutes-insert-latex-header (org-minutes-convert-keywords))
 				;; process open questions
 				(beginning-of-buffer)
 				(org-minutes-replace-questions-with-latex)

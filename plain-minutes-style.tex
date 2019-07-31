@@ -1,8 +1,16 @@
+
 \usepackage{helvet}
-\usepackage{xcolor}
 \renewcommand{\familydefault}{\sfdefault}
+\usepackage{xcolor}
+\usepackage{draftwatermark}
+\SetWatermarkScale{1}
+\usepackage{datetime}
+\usepackage{multicol}
+
 \usepackage[left=20mm, right=45mm, top=15mm, bottom=20mm, marginparsep=10mm, marginparwidth=30mm, nohead]{geometry}
+
 \pagenumbering{gobble}
+
 \usepackage{enumitem}
 \setlistdepth{10}
 \renewlist{itemize}{itemize}{10}
@@ -13,16 +21,35 @@
 \setlist[itemize,4]{label=\raisebox{0.2ex}{$\triangleright$}}
 \setlist[itemize,5]{label=\raisebox{0.2ex}{$\star$}}
 \setlist[itemize]{noitemsep}  % itemsep=0mm, nosep, noitemsep, parsep=0pt
+
 \makeatletter
+\newcommand\chair[1]{\renewcommand\@chair{#1}}
+\newcommand\@chair{}
+
+\newcommand\event[1]{\renewcommand\@event{#1}}
+\newcommand\@event{}
+
+\newcommand\participants[1]{\renewcommand\@participants{#1}}
+\newcommand\@participants{}
+
+\newcommand\place[1]{\renewcommand\@place{#1}}
+\newcommand\@place{}
+
 \renewcommand\maketitle{
   ~\vspace{-1.1cm}\newline
   {\raggedright
     \renewcommand{\baselinestretch}{1.2}\selectfont
-    {\bfseries\LARGE Protokoll \\[1ex]}
-    {\large {\bfseries Veranstaltung:} \@title}\\[1ex]
+    {\bfseries\LARGE \@title \\[1ex]}
+    {\large {\bfseries Veranstaltung:} \@event }\\
+    {\large {\bfseries Ort:} \@place }\\
     {\large {\bfseries Datum:} \@date}\\[1ex]
+    {\large {\bfseries Leitung:} \@chair}\\
+    {\large {\bfseries Teilnehmer:} \begin{multicols}{2}\@participants\end{multicols}}%\\[1ex]
+    
     {\large {\bfseries Protokollführer:} \@author}\\[4ex]
   }
+  
+  \noindent\rule{\textwidth}{0.5pt}
 }
 \makeatother
 
