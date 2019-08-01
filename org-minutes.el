@@ -95,13 +95,13 @@ Inspired by: https://emacs.stackexchange.com/a/38367/12336"
 (defun org-minutes-replace-tags-with-latex ()
 	"Replace all item tags with appropriate LaTeX commands."
 	(save-excursion
-		(while (re-search-forward "^\\([[:blank:]]*\\)\\([0-9]+\)\\|-\\)[[:blank:]]+\\(A:\\|C:\\|E:\\|D:\\|I:\\|\\[ \\]\\)?[[:blank:]]*\\(.*?\\)[[:blank:]]+\\(::\\|||\\)" nil t)
+		(while (re-search-forward (org-minutes-make-regexp "\\(A:\\|C:\\|E:\\|D:\\|I:\\|\\[ \\]\\)?")  nil t)
 			(replace-match
 			 (let ((indentation (match-string 1))
 						 (mark (match-string 2))
-						 (cat (match-string 3))
-						 (name (match-string 4))
-						 (separator (match-string 5)))
+						 (cat (match-string 4))
+						 (name (match-string 5))
+						 (separator (match-string 6)))
 				 (if (string= indentation "")
 						 (concat "* " 					; no indentation
 										 (if (stringp name)
