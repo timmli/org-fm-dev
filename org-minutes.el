@@ -35,16 +35,16 @@
 	"\\(\\?\\(:\\||\\)\\)\\(.*?\\)\\(\\(:\\||\\)\\?\\)")
 
 (defvar org-minutes-keywords-latex-alist
-	'(("MINUTES_TITLE" "#+TITLE: ###")
-		("MINUTES_AUTHOR" "#+AUTHOR: ###")
-		("MINUTES_LATEX_STYLE" "#+LATEX_HEADER: \\input{###}")
-		("MINUTES_CHAIR" "#+LATEX_HEADER: \\chair{###}")
-		("MINUTES_EVENT" "#+LATEX_HEADER: \\event{###}")
-		("MINUTES_PLACE" "#+LATEX_HEADER: \\place{###}")
-		("MINUTES_PARTICIPANTS" "#+LATEX_HEADER: \\participants{###}")
-		("MINUTES_DATE" "#+DATE: ###")
-		("MINUTES_DRAFT_TEXT" "#+LATEX_HEADER: \\SetWatermarkText{###}")
-		("MINUTES_OPTIONS" "#+OPTIONS: ###")
+	'(("MINUTES_TITLE" "#+TITLE: %s")
+		("MINUTES_AUTHOR" "#+AUTHOR: %s")
+		("MINUTES_LATEX_STYLE" "#+LATEX_HEADER: \\input{%s}")
+		("MINUTES_CHAIR" "#+LATEX_HEADER: \\chair{%s}")
+		("MINUTES_EVENT" "#+LATEX_HEADER: \\event{%s}")
+		("MINUTES_PLACE" "#+LATEX_HEADER: \\place{%s}")
+		("MINUTES_PARTICIPANTS" "#+LATEX_HEADER: \\participants{%s}")
+		("MINUTES_DATE" "#+DATE: %s")
+		("MINUTES_DRAFT_TEXT" "#+LATEX_HEADER: \\SetWatermarkText{%s}")
+		("MINUTES_OPTIONS" "#+OPTIONS: %s")
 		)
 	"Alist for mapping org-minutes keywords to LaTeX commands.
 The order in ORG-MINUTES-KEYWORDS-ALIST determines the order of the inserted LaTeX header.")
@@ -162,14 +162,18 @@ Inspired by: https://emacs.stackexchange.com/a/38367/12336"
 						(let ((keyword-alist-input-value (car (cdr (assoc element-key keyword-alist-input)))))
 							(add-to-list 'keyword-alist-output
 													 `(,element-key
-														 ,(if (string-match "###" keyword-alist-input-value)
-																	(concat
-																	 (replace-match element-value nil t keyword-alist-input-value)
-																	 "\n")
-																(concat
-																 keyword-alist-input-value
-																 element-value
-																 "\n")))
+														 ,(concat
+															 (format keyword-alist-input-value element-value)
+															 "\n")
+														 ;; ,(if (string-match "###" keyword-alist-input-value)
+														 ;; 			(concat
+														 ;; 			 (replace-match element-value nil t keyword-alist-input-value)
+														 ;; 			 "\n")
+														 ;; 		(concat
+														 ;; 		 keyword-alist-input-value
+														 ;; 		 element-value
+														 ;; 		 "\n"))
+														 )
 													 )))))
 			keyword-alist-output
 			)))
@@ -200,13 +204,15 @@ Inspired by: https://emacs.stackexchange.com/a/38367/12336"
 		(insert
 		 (let ((participants-list (org-minutes-convert-participants-list))
 					 (keyword-latex (car (cdr (assoc "MINUTES_PARTICIPANTS" org-minutes-keywords-latex-alist)))))
-			 (when (string-match "###"
-													 keyword-latex)
-				 (concat
-					(replace-match participants-list
-												 nil t
-												 keyword-latex)
-					"\n"))))
+			 (concat (format keyword-latex participants-list) "\n")
+			 ;; (when (string-match "%s"
+			 ;; 										 keyword-latex)
+			 ;; 	 (concat
+			 ;; 		(replace-match participants-list
+			 ;; 									 nil t
+			 ;; 									 keyword-latex)
+			 ;; 		"\n")))
+			 ))
 		(org-drawer-delete "PARTICIPANTS-LIST")
 		))
 
