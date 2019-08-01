@@ -15,8 +15,9 @@
 
 :PARTICIPANTS-LIST:
 - [X] John Doe
-- [ ] Peter Smith
 - [X] Kim Miller
+- [X] Sue Parker
+- [ ] Peter Smith
 :END:
 
 1) John :: TOP 1
