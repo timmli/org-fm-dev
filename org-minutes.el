@@ -49,6 +49,13 @@
 	"Alist for mapping org-minutes keywords to LaTeX commands.
 The order in ORG-MINUTES-KEYWORDS-ALIST determines the order of the inserted LaTeX header.")
 
+(defun org-minutes-make-regexp (cat)
+	"Make regular expression for some category CAT of org-minutes items."
+	(concat
+	 "^\\([[:blank:]]*\\)\\([0-9]+\)\\|-\\)[[:blank:]]+\\("
+	 cat
+	 "[[:blank:]]*\\(.*?\\)[[:blank:]]+\\(::\\|||\\)\\)"))
+
 (defun org-drawer-delete (name)
   "Delete all drawers in buffer with title NAME.
 Inspired by: https://emacs.stackexchange.com/a/38367/12336"
