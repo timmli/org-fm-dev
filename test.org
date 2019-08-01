@@ -8,7 +8,6 @@
 #+MINUTES_DATE: 01.07.2019, 12:15--13:45
 #+MINUTES_AUTHOR: John Doe
 #+MINUTES_CHAIR: Sue Parker
-#+MINUTES_Participants: \begin{itemize} \item Sue Parker \end{itemize}
 # #+MINUTES_Participants:  Sue Parker 
 #+MINUTES_DRAFT_TEXT: DRAFT
 #+MINUTES_LATEX_STYLE: plain-minutes-style.tex
@@ -19,14 +18,6 @@
 - [ ] Peter Smith
 - [X] Kim Miller
 :END:
-
-
-# #+LATEX: \bigskip
-# #+LATEX: \begin{tabular}{ll}
-# #+LATEX: \begin{minipage}[t]{0.45\textwidth}
-# #+LATEX: \end{minipage}
-# #+LATEX: \end{tabular}
-# #+LATEX: \bigskip
 
 1) John :: TOP 1
        - A: Peter :: Something to do.
