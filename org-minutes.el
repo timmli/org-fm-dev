@@ -54,7 +54,7 @@ The order in ORG-MINUTES-KEYWORDS-ALIST determines the order of the inserted LaT
 	(concat
 	 "^\\([[:blank:]]*\\)\\([0-9]+\)\\|-\\)[[:blank:]]+\\("
 	 cat
-	 "[[:blank:]]*\\(.*?\\)[[:blank:]]+\\(::\\|||\\)\\)"))
+	 "[[:blank:]]*\\(.*?\\)[[:blank:]]+\\(::\\|||\\)\\) "))
 
 (defun org-drawer-delete (name)
   "Delete all drawers in buffer with title NAME.
@@ -105,8 +105,8 @@ Inspired by: https://emacs.stackexchange.com/a/38367/12336"
 				 (if (string= indentation "")
 						 (concat "* " 					; no indentation
 										 (if (stringp name)
-												 (concat " @@latex:\\\\InformationTagMargin{@@"
-																 name "@@latex:}@@")))
+												 (concat " @@latex:\\\\texorpdfstring{\\\\InformationTagMargin{@@"
+																 name "@@latex:}}{}@@")))
 					 (concat indentation mark ; with identation
 									 (cond ((or (string= cat "A:") (string= cat "[ ]"))
 													(concat " @@latex:\\\\ActionTag@@"))

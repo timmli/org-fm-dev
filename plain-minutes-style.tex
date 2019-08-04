@@ -9,7 +9,7 @@
 
 \usepackage[left=20mm, right=45mm, top=15mm, bottom=20mm, marginparsep=10mm, marginparwidth=30mm, nohead]{geometry}
 
-\pagenumbering{gobble}
+% \pagenumbering{gobble}          % remove page numbering
 
 \usepackage{enumitem}
 \setlistdepth{10}
@@ -52,6 +52,17 @@
   \noindent\rule{\textwidth}{0.5pt}
 }
 \makeatother
+
+\usepackage{titlesec}
+\titleformat{\section}
+{\leaders\vrule width \textwidth\vskip 0.4pt\vspace{.8ex}%
+  \normalfont\Large\bfseries}
+{\thesection}
+{1em}
+{}
+
+\usepackage{tocloft}
+\renewcommand{\cftsecleader}{\cftdotfill{\cftdotsep}}
 
 \newcommand{\OpenQuestion}[1]{\colorbox{orange}{?} {\color{orange}#1}}
 \newcommand{\ActionTag}[2]{\colorbox{red}{A} #1 $#2$ }

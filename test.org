@@ -1,6 +1,6 @@
 * Minutes                                                           :minutes:
 
-#+EXPORT_FILE_NAME: minutes-DRAFT.pdf
+#+EXPORT_FILE_NAME: test.pdf
 
 #+MINUTES_TITLE: Minutes
 #+MINUTES_EVENT: Some event
@@ -17,13 +17,14 @@
 - [X] John Doe
 - [X] Kim Miller
 - [X] Sue Parker
+- [X] Alexandra West
 - [ ] Peter Smith
 :END:
 
-1) John :: TOP 1
+1) John, Kim, Sue, Alexandra :: TOP 1
        - A: Peter :: Something to do.
        - E: :: Decision made
 2) Second TOP
    - I: Sue :: Some information
    - C: :: Cleared item
-   - ?:Open question:? 
+   - ?:Open question regarding minutes:? 
