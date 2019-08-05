@@ -250,6 +250,88 @@ This function uses the regular `org-export-dispatcher'."
 				)
 			)))
 
+(defface org-minutes-information-face
+	'((t (
+				:box t
+						 :foreground "CornflowerBlue"
+						 :weight bold)))
+	"Face for the information type of minutes items.")
+
+(defface org-minutes-decision-face
+	'((t (
+				:box t
+						 :foreground "LimeGreen"
+						 :weight bold)))
+	"Face for the decision type of minutes items.")
+
+(defface org-minutes-cleared-agenda-face
+	'((t (
+				:inherit org-checkbox-done-text
+								 :box t
+								 :weight bold)))
+	"Face for the cleared type of minutes items.")
+
+(defface org-minutes-agenda-face
+	'((t (
+				:box t
+						 :foreground "red"
+						 :weight bold)))
+	"Face for the agenda type of minutes items.")
+
+(defface org-minutes-question-face
+	'((t (
+				:box t
+						 :foreground "orange"
+						 :weight bold)))
+	"Face for the question type of minutes items.")
+
+(define-minor-mode org-minutes-minor-mode
+	"Nice overlays for `org-minutes'."
+	:lighter " om"
+	
+	(font-lock-add-keywords
+	 'org-mode
+	 `((,(org-minutes-make-regexp "\\(I:\\)?")
+			(3 '(org-minutes-information-face))
+			)))
+	
+	(font-lock-add-keywords
+	 'org-mode
+	 `((,(org-minutes-make-regexp "E:")
+			(3 '(org-minutes-decision-face))
+			)))
+
+	(font-lock-add-keywords
+	 'org-mode
+	 `((,(org-minutes-make-regexp "D:")
+			(3 '(org-minutes-decision-face))
+			)))
+
+
+	(font-lock-add-keywords
+	 'org-mode
+	 `((,(org-minutes-make-regexp "C:")
+			(3 '(org-minutes-cleared-agenda-face))
+			)))
+
+
+	(font-lock-add-keywords
+	 'org-mode
+	 `((,(org-minutes-make-regexp "\\(A:\\|\\[ \\]\\)")
+			(3 '(org-minutes-agenda-face))
+			)))
+
+	(font-lock-add-keywords
+	 'org-mode
+	 `((,org-minutes-question-regexp
+			(1 '(font-lock-comment-face))
+			(3 '(org-minutes-question-face))
+			(4 '(font-lock-comment-face))
+			)))
+	)
+
+;; (add-hook 'org-mode-hook 'org-minutes-minor-mode)
+
 (provide 'org-minutes)
 
 ;;; org-minutes.el ends here
