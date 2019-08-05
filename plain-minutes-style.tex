@@ -22,6 +22,8 @@
 \setlist[itemize,5]{label=\raisebox{0.2ex}{$\star$}}
 \setlist[itemize]{noitemsep}  % itemsep=0mm, nosep, noitemsep, parsep=0pt
 
+\hypersetup{hidelinks=true}
+
 \makeatletter
 \newcommand\chair[1]{\renewcommand\@chair{#1}}
 \newcommand\@chair{}
@@ -64,10 +66,17 @@
 \usepackage{tocloft}
 \renewcommand{\cftsecleader}{\cftdotfill{\cftdotsep}}
 
-\newcommand{\OpenQuestion}[1]{\colorbox{orange}{?} {\color{orange}#1}}
-\newcommand{\ActionTag}[2]{\colorbox{red}{A} #1 $#2$ }
+\newcommand{\OpenQuestion}[1]{%
+  \colorbox{orange}{?} {\color{orange}#1}%
+  \addcontentsline{toc}{subsection}{%
+    \texorpdfstring{\colorbox{orange}{?} {\color{orange}#1}}{#1}}}
+\newcommand{\ActionTag}[2]{%
+  \addcontentsline{toc}{subsection}{\texorpdfstring{\colorbox{red}{A} #1}{#1}}%
+  \colorbox{red}{A} #1 $#2$ }
 \newcommand{\ClearedTag}[2]{\colorbox{green!50!black}{C} #1 $#2$ }
-\newcommand{\EntscheidungTag}[2]{\colorbox{green}{E} #1 $#2$ }
+\newcommand{\EntscheidungTag}[2]{%
+  \addcontentsline{toc}{subsection}{\texorpdfstring{\colorbox{green}{E}}{E}}%
+  \colorbox{green}{E} #1 $#2$ }
 \newcommand{\DecisionTag}[2]{\colorbox{green}{D} #1 $#2$ }
 \newcommand{\InformationTag}[2]{\colorbox{blue!20}{I} #1 $#2$ }
 

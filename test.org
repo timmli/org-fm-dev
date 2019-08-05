@@ -17,8 +17,8 @@
 - [X] John Doe
 - [X] Kim Miller
 - [X] Sue Parker
-- [X] Alexandra West
 - [ ] Peter Smith
+- [X] Alexandra West
 :END:
 
 1) John, Kim, Sue, Alexandra :: TOP 1
