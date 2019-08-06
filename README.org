@@ -35,8 +35,6 @@ which means:
 - When =<TYPE>= or =<NAMES>= are given, there also has to be a =<SEPARATOR>=.
 - When =<NAMES>= but not =<TYPE>= is given, the implicit type will be =I:= (information).
 
-Participants can be included using the drawer =:PARTICIPANTS-LIST= which is assumed to contain exactly one list.
-
 *** Keywords
 
 There is a number of special =org-minutes= keywords that are used during export:
@@ -53,6 +51,8 @@ There is a number of special =org-minutes= keywords that are used during export:
 | =#+MINUTES_PARTICIPANTS:= | list of names |
 | =#+MINUTES_LATEX_STYLE:=  | name of \LaTeX style file |
 | =#+MINUTES_OPTIONS:=      | used as =#+OPTIONS:= |
+
+Participants can be included using the drawer =:PARTICIPANTS-LIST:= which is assumed to contain exactly one list. The content of =:PARTICIPANTS-LIST:= will overwrite =#+MINUTES_PARTICIPANTS:=.
 
 *** Example
 
