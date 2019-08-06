@@ -1,6 +1,44 @@
 
 * org-minutes
 
-- [ ] add special fields (=#+Minutes_Title=, ...)
+=org-minutes= supports taking and exporting minutes. =org-minutes= assumes a very simple but effective minutes format consisting of plain lists, where list items can be typed and assigned to participants using the dictionary notation of =org-mode= lists. 
+
+** Installation
+
+** Usage
+
+*** The basic format  
+
+=org-minutes= consist of *one* arbitrarily deeply embedded list, where the topmost level is an enumeration (=1)=, =2)=, ...).  
+
+=org-minutes= items have the following structure
+
+#+BEGIN_EXAMPLE
+1) (I:? <NAMES>? <SEPARATOR>)? <CONTENT>  
+#+END_EXAMPLE
+
+#+BEGIN_EXAMPLE
+- (<TYPE>? <NAMES>? <SEPARATOR>)? <CONTENT>
+#+END_EXAMPLE
+
+which means:
+- =<TYPE>= is the type of the item. There is a choice of item types built in:  
+   | <TYPE>       | description   |
+   |--------------+---------------|
+   | =A:=, =[ ]=  | action/agenda |
+   | =D:=, =E:=   | decision      |
+   | =I:=         | information   |
+   | =C:=         | consultation  |
+   | =CA:=, =[X]= | cleared       |
+- =<NAMES>= is a comma-separated list of participant names.
+- =<SEPARATOR>= can be =::= or =||=.
+- When =<TYPE>= or =<NAMES>= are given, there also has to be a =<SEPARATOR>=.
+- When =<NAMES>= but not =<TYPE>= is given, the implicit type will be =I:= (information).
+
+*** Example
+
+*** Export
+
+** Plans
+
 - [ ] activate faces only in headings with minutes?
-- [ ] regression in PDF bookmarks

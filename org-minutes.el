@@ -34,6 +34,13 @@
 (defvar org-minutes-question-regexp
 	"\\(\\?\\(:\\||\\)\\)\\(.*?\\)\\(\\(:\\||\\)\\?\\)")
 
+(defun org-minutes-make-regexp (cat)
+	"Make regular expression for some category CAT of org-minutes items."
+	(concat
+	 "^\\([[:blank:]]*\\)\\([0-9]+\)\\|-\\)[[:blank:]]+\\("
+	 cat
+	 "[[:blank:]]*\\(.*?\\)[[:blank:]]+\\(::\\|||\\)\\) "))
+
 (defvar org-minutes-keywords-latex-alist
 	'(("MINUTES_TITLE" "#+TITLE: %s")
 		("MINUTES_AUTHOR" "#+AUTHOR: %s")
@@ -49,13 +56,6 @@
 	"Alist for mapping org-minutes keywords to LaTeX commands.
 The order in ORG-MINUTES-KEYWORDS-ALIST determines the order of the inserted LaTeX header.")
 
-(defun org-minutes-make-regexp (cat)
-	"Make regular expression for some category CAT of org-minutes items."
-	(concat
-	 "^\\([[:blank:]]*\\)\\([0-9]+\)\\|-\\)[[:blank:]]+\\("
-	 cat
-	 "[[:blank:]]*\\(.*?\\)[[:blank:]]+\\(::\\|||\\)\\) "))
-
 (defun org-drawer-delete (name)
   "Delete all drawers in buffer with title NAME.
 Inspired by: https://emacs.stackexchange.com/a/38367/12336"
@@ -70,7 +70,6 @@ Inspired by: https://emacs.stackexchange.com/a/38367/12336"
 			(org-mark-element)
 			(delete-region (region-beginning) (region-end))
 			(org-remove-empty-drawer-at (point)))))
-
 
 (defun org-minutes-clean-heading ()
 	"Clean up current heading."
