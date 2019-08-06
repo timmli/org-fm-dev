@@ -35,20 +35,22 @@ which means:
 - When =<TYPE>= or =<NAMES>= are given, there also has to be a =<SEPARATOR>=.
 - When =<NAMES>= but not =<TYPE>= is given, the implicit type will be =I:= (information).
 
+Participants can be included using the drawer =:PARTICIPANTS-LIST= which is assumed to contain exactly one list.
+
 *** Keywords
 
 There is a number of special =org-minutes= keywords that are used during export:
 
 | keywords                  | description |
 |---------------------------+-------------|
-| =#+MINUTES-TITLE:=        |  title of the document; used as =#+TITLE:= |
-| =#+MINUTES-EVENT:=        |  name of the event |
-| =#+MINUTES-PLACE:=        |  place of the event |
-| =#+MINUTES-DATE:=         |  used as =#+DATE:= |
-| =#+MINUTES-AUTHOR:=       | name of minute taker; used as =#+AUTHOR:= |
-| =#+MINUTES-CHAIR:=        | chair of the event |
-| =#+MINUTES-DRAFT-TEXT:=   | text of the draft watermark  |
-| =#+MINUTES-PARTICIPANTS:= | list of names |
+| =#+MINUTES_TITLE:=        |  title of the document; used as =#+TITLE:= |
+| =#+MINUTES_EVENT:=       |  name of the event |
+| =#+MINUTES_PLACE:=       |  place of the event |
+| =#+MINUTES_DATE:=        |  used as =#+DATE:= |
+| =#+MINUTES_AUTHOR:=      | name of minute taker; used as =#+AUTHOR:= |
+| =#+MINUTES_CHAIR:=       | chair of the event |
+| =#+MINUTES_DRAFT-TEXT:=  | text of the draft watermark  |
+| =#+MINUTES_PARTICIPANTS:= | list of names |
 | =#+MINUTES_LATEX_STYLE:=  | name of \LaTeX style file |
 | =#+MINUTES_OPTIONS:=      | used as =#+OPTIONS:= |
 
