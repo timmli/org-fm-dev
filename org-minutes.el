@@ -24,7 +24,22 @@
 ;; OTHER DEALINGS IN THE SOFTWARE.
 
 ;;; Commentary:
-;; 
+;; This package helps to write and export minutes that are written in
+;; the org-minutes format.  The org-minutes format uses an org-list
+;; where items can be typed or assigned a participant.
+
+;;; Example:
+;; 1) John, Kim, Sue, Alexandra :: A first TOP
+;;    - A: Peter :: Something to do.
+;;    - E: :: Decision made
+;; 2) A second TOP
+;;    - I: Sue :: Some information
+;;    - C: :: Cleared item
+;;    - ?:Open question regarding minutes:? 
+
+;;; Usage:
+;; Run `org-mintes-export' to export a heading that contains minutes.
+;; Appropriate faces can be activated with `org-minutes-minor-mode'.
 
 ;;; Code:
 
@@ -285,7 +300,9 @@ This function uses the regular `org-export-dispatcher'."
 	"Face for the question type of minutes items.")
 
 (define-minor-mode org-minutes-minor-mode
-	"Nice overlays for `org-minutes'."
+	"Minor mode for org-minutes. This minor mode makes available
+some useful faces for highlighting the type and assignment of
+org-minutes items."
 	:lighter " om"
 	
 	(font-lock-add-keywords

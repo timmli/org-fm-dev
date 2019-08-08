@@ -21,10 +21,10 @@
 - [X] Alexandra West
 :END:
 
-1) John, Kim, Sue, Alexandra :: TOP 1
+1) John, Kim, Sue, Alexandra :: A first TOP
        - A: Peter :: Something to do.
        - E: :: Decision made
-2) Second TOP
-   - I: Sue :: Some information
-   - C: :: Cleared item
-   - ?:Open question regarding minutes:? 
+2) A second TOP
+       - I: Sue :: Some information
+       - C: :: Cleared item
+       - ?:Open question regarding minutes:? 
