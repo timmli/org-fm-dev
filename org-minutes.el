@@ -110,7 +110,7 @@ Inspired by: https://emacs.stackexchange.com/a/38367/12336"
 	"Replace all item tags with appropriate LaTeX commands."
 	(save-excursion
 		(while (re-search-forward
-						(org-minutes-make-regexp "\\(A:\\|CA:\\|E:\\|D:\\|I:\\|C:\\|B:\\|\\[ \\]\\|\\[X\\]\\)?")
+						(org-minutes-make-regexp "\\(A:\\|AC:\\|E:\\|D:\\|I:\\|C:\\|B:\\|\\[ \\]\\|\\[X\\]\\)?")
 						nil t)
 			(replace-match
 			 (let ((indentation (match-string 1))
@@ -126,7 +126,7 @@ Inspired by: https://emacs.stackexchange.com/a/38367/12336"
 					 (concat indentation mark ; with identation
 									 (cond ((or (string= cat "A:") (string= cat "[ ]"))
 													(concat " @@latex:\\\\ActionTag@@"))
-												 ((or (string= cat "CA:") (string= cat "[X]"))
+												 ((or (string= cat "AC:") (string= cat "[X]"))
 													(concat " @@latex:\\\\ClearedTag@@"))
 												 ((string= cat "E:")
 													(concat " @@latex:\\\\EntscheidungTag@@"))
@@ -142,7 +142,7 @@ Inspired by: https://emacs.stackexchange.com/a/38367/12336"
 													(concat " @@latex:\\\\ActionTagMargin@@@@latex:{@@"
 																	name
 																	"@@latex:}@@"))
-												 ((or (string= cat "CA:") (string= cat "[X]"))
+												 ((or (string= cat "AC:") (string= cat "[X]"))
 													(concat " @@latex:\\\\ClearedTagMargin@@@@latex:{@@ "
 																	name
 																	"@@latex:}@@"))
@@ -329,7 +329,7 @@ org-minutes items."
 
 	(font-lock-add-keywords
 	 'org-mode
-	 `((,(org-minutes-make-regexp "\\(CA:\\|\\[X\\]\\)")
+	 `((,(org-minutes-make-regexp "\\(AC:\\|\\[X\\]\\)")
 			(3 '(org-minutes-cleared-agenda-face))
 			)))
 

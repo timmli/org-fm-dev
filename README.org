@@ -29,7 +29,7 @@ which means:
    | =D:=, =E:=   | decision/Entscheidung |
    | =I:=         | information           |
    | =C:=, =B:=   | consultation/Beratung |
-   | =CA:=, =[X]= | cleared               |
+   | =AC:=, =[X]= | cleared               |
 - =<NAMES>= is a comma-separated list of participant names.
 - =<SEPARATOR>= can be =::= or =||=.
 - When =<TYPE>= or =<NAMES>= are given, there also has to be a =<SEPARATOR>=.
