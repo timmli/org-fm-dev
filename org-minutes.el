@@ -109,7 +109,9 @@ Inspired by: https://emacs.stackexchange.com/a/38367/12336"
 (defun org-minutes-replace-tags-with-latex ()
 	"Replace all item tags with appropriate LaTeX commands."
 	(save-excursion
-		(while (re-search-forward (org-minutes-make-regexp "\\(A:\\|C:\\|E:\\|D:\\|I:\\|\\[ \\]\\)?")  nil t)
+		(while (re-search-forward
+						(org-minutes-make-regexp "\\(A:\\|CA:\\|E:\\|D:\\|I:\\|C:\\|B:\\|\\[ \\]\\|\\[X\\]\\)?")
+						nil t)
 			(replace-match
 			 (let ((indentation (match-string 1))
 						 (mark (match-string 2))
@@ -119,19 +121,20 @@ Inspired by: https://emacs.stackexchange.com/a/38367/12336"
 				 (if (string= indentation "")
 						 (concat "* " 					; no indentation
 										 (if (stringp name)
-												 (concat " @@latex:\\\\texorpdfstring{\\\\InformationTagMargin{@@"
+												 (concat " @@latex:\\\\texorpdfstring{\\\\InformationTagTOPMargin{@@"
 																 name "@@latex:}}{}@@")))
 					 (concat indentation mark ; with identation
 									 (cond ((or (string= cat "A:") (string= cat "[ ]"))
 													(concat " @@latex:\\\\ActionTag@@"))
-												 ((string= cat "C:")
+												 ((or (string= cat "CA:") (string= cat "[X]"))
 													(concat " @@latex:\\\\ClearedTag@@"))
 												 ((string= cat "E:")
 													(concat " @@latex:\\\\EntscheidungTag@@"))
 												 ((string= cat "D:")
 													(concat " @@latex:\\\\DecisionTag@@"))
-												 ((string= cat "I:")
+												 ((or (string= cat "I:") (string= cat "C:") (string= cat "B:"))
 													(concat " @@latex:\\\\InformationTag@@"))
+												 (t " @@latex:\\\\NoTag@@")
 												 )
 									 (concat "@@latex:{@@" name "@@latex:}@@"
 													 "@@latex:{@@" separator "@@latex:}@@")
@@ -139,7 +142,7 @@ Inspired by: https://emacs.stackexchange.com/a/38367/12336"
 													(concat " @@latex:\\\\ActionTagMargin@@@@latex:{@@"
 																	name
 																	"@@latex:}@@"))
-												 ((string= cat "C:")
+												 ((or (string= cat "CA:") (string= cat "[X]"))
 													(concat " @@latex:\\\\ClearedTagMargin@@@@latex:{@@ "
 																	name
 																	"@@latex:}@@"))
@@ -151,7 +154,7 @@ Inspired by: https://emacs.stackexchange.com/a/38367/12336"
 													(concat " @@latex:\\\\DecisionTagMargin@@@@latex:{@@ "
 																	name
 																	"@@latex:}@@"))
-												 ((string= cat "I:")
+												 ((or (string= cat "I:") (string= cat "C:") (string= cat "B:"))
 													(concat " @@latex:\\\\InformationTagMargin@@@@latex:{@@ "
 																	name
 																	"@@latex:}@@"))))))
@@ -307,7 +310,7 @@ org-minutes items."
 	
 	(font-lock-add-keywords
 	 'org-mode
-	 `((,(org-minutes-make-regexp "\\(I:\\)?")
+	 `((,(org-minutes-make-regexp "\\(I:\\|C:\\|B:\\)?")
 			(3 '(org-minutes-information-face))
 			)))
 	
@@ -326,7 +329,7 @@ org-minutes items."
 
 	(font-lock-add-keywords
 	 'org-mode
-	 `((,(org-minutes-make-regexp "C:")
+	 `((,(org-minutes-make-regexp "\\(CA:\\|\\[X\\]\\)")
 			(3 '(org-minutes-cleared-agenda-face))
 			)))
 

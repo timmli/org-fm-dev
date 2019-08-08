@@ -22,6 +22,8 @@
 \setlist[itemize,5]{label=\raisebox{0.2ex}{$\star$}}
 \setlist[itemize]{noitemsep}  % itemsep=0mm, nosep, noitemsep, parsep=0pt
 
+\usepackage{marginnote}         % marginnote allows one to regulate the distance of margin notes
+
 \hypersetup{hidelinks=true}
 
 \makeatletter
@@ -69,19 +71,23 @@
 \newcommand{\OpenQuestion}[1]{%
   \colorbox{orange}{?} {\color{orange}#1}%
   \addcontentsline{toc}{subsection}{%
-    \texorpdfstring{\colorbox{orange}{?} {\color{orange}#1}}{#1}}}
+    \texorpdfstring{\colorbox{orange}{?} {\color{orange}#1}}{?: #1}}}
 \newcommand{\ActionTag}[2]{%
-  \addcontentsline{toc}{subsection}{\texorpdfstring{\colorbox{red}{A} #1}{#1}}%
+  \addcontentsline{toc}{subsection}{\texorpdfstring{\colorbox{red}{A} #1}{A: #1}}%
   \colorbox{red}{A} #1 $#2$ }
-\newcommand{\ClearedTag}[2]{\colorbox{green!50!black}{C} #1 $#2$ }
+\newcommand{\ClearedTag}[2]{\colorbox{green!50!black}{CA} #1 $#2$ }
 \newcommand{\EntscheidungTag}[2]{%
-  \addcontentsline{toc}{subsection}{\texorpdfstring{\colorbox{green}{E}}{E}}%
+  \addcontentsline{toc}{subsection}{\texorpdfstring{\colorbox{green}{E}}{E:}}%
   \colorbox{green}{E} #1 $#2$ }
-\newcommand{\DecisionTag}[2]{\colorbox{green}{D} #1 $#2$ }
+\newcommand{\DecisionTag}[2]{%
+  \addcontentsline{toc}{subsection}{\texorpdfstring{\colorbox{green}{D}}{D}}%
+  \colorbox{green}{D} #1 $#2$ }
 \newcommand{\InformationTag}[2]{\colorbox{blue!20}{I} #1 $#2$ }
+\newcommand{\NoTag}[2]{#1 $#2$ }
 
-\newcommand{\ActionTagMargin}[1]{\protect\marginpar{\colorbox{red}{A} #1}}
-\newcommand{\ClearedTagMargin}[1]{\protect\marginpar{\colorbox{green!50!black}{C} #1}}
-\newcommand{\EntscheidungTagMargin}[1]{\protect\marginpar{\colorbox{green}{E} #1}}
-\newcommand{\DecisionTagMargin}[1]{\protect\marginpar{\colorbox{green}{D} #1}}
-\newcommand{\InformationTagMargin}[1]{\protect\marginpar{\colorbox{blue!20}{I} #1}}
+\newcommand{\ActionTagMargin}[1]{\protect\marginnote{\colorbox{red}{A} #1}}
+\newcommand{\ClearedTagMargin}[1]{\protect\marginnote{\colorbox{green!50!black}{CA} #1}}
+\newcommand{\EntscheidungTagMargin}[1]{\protect\marginnote{\colorbox{green}{E} #1}}
+\newcommand{\DecisionTagMargin}[1]{\protect\marginnote{\colorbox{green}{D} #1}}
+\newcommand{\InformationTagMargin}[1]{\protect\marginnote{\colorbox{blue!20}{I} #1}}
+\newcommand{\InformationTagTOPMargin}[1]{\protect\marginpar{\colorbox{blue!20}{I} #1}}

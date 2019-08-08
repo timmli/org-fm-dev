@@ -23,13 +23,13 @@
 
 which means:
 - =<TYPE>= is the type of the item. There is a choice of item types built in:  
-   | <TYPE>         | description   |
-   |--------------+---------------|
-   | =A:=, =[ ]=  | action/agenda |
-   | =D:=, =E:=   | decision      |
-   | =I:=         | information   |
-   | =C:=         | consultation  |
-   | =CA:=, =[X]= | cleared       |
+   | <TYPE>       | description           |
+   |--------------+-----------------------|
+   | =A:=, =[ ]=  | action/agenda         |
+   | =D:=, =E:=   | decision/Entscheidung |
+   | =I:=         | information           |
+   | =C:=, =B:=   | consultation/Beratung |
+   | =CA:=, =[X]= | cleared               |
 - =<NAMES>= is a comma-separated list of participant names.
 - =<SEPARATOR>= can be =::= or =||=.
 - When =<TYPE>= or =<NAMES>= are given, there also has to be a =<SEPARATOR>=.
@@ -44,11 +44,11 @@ There is a number of special =org-minutes= keywords that are used during export:
 | =#+MINUTES_TITLE:=        |  title of the document; used as =#+TITLE:= |
 | =#+MINUTES_EVENT:=       |  name of the event |
 | =#+MINUTES_PLACE:=       |  place of the event |
-| =#+MINUTES_DATE:=        |  used as =#+DATE:= |
+| =#+MINUTES_DATE:=        |  date of the event; used as =#+DATE:= |
 | =#+MINUTES_AUTHOR:=      | name of minute taker; used as =#+AUTHOR:= |
 | =#+MINUTES_CHAIR:=       | chair of the event |
 | =#+MINUTES_DRAFT-TEXT:=  | text of the draft watermark  |
-| =#+MINUTES_PARTICIPANTS:= | list of names |
+| =#+MINUTES_PARTICIPANTS:= | names of participants |
 | =#+MINUTES_LATEX_STYLE:=  | name of \LaTeX style file |
 | =#+MINUTES_OPTIONS:=      | used as =#+OPTIONS:= |
 
@@ -60,4 +60,6 @@ Participants can be included using the drawer =:PARTICIPANTS-LIST:= which is ass
 
 ** Plans
 
+- [ ] add easy way to include the time
 - [ ] activate faces only in headings with minutes?
+- [ ] abbreviation management system?

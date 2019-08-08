@@ -1,6 +1,6 @@
 * Minutes                                                           :minutes:
 
-#+EXPORT_FILE_NAME: test.pdf
+#+EXPORT_FILE_NAME: example.pdf
 
 #+MINUTES_TITLE: Minutes
 #+MINUTES_EVENT: Some event
@@ -23,8 +23,11 @@
 
 1) John, Kim, Sue, Alexandra :: A first TOP
        - A: Peter :: Something to do.
+       - [ ] :: Again something to do.
        - E: :: Decision made
 2) A second TOP
-       - I: Sue :: Some information
-       - C: :: Cleared item
-       - ?:Open question regarding minutes:? 
+       - CA: :: Cleared item
+       - [X] :: Another cleared item 
+       - C: :: Consultation ?:Open question regarding minutes:?
+             - Sue :: Sue's idea
+             - Kim :: Kim's question
