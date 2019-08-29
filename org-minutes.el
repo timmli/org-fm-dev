@@ -132,8 +132,10 @@ Inspired by: https://emacs.stackexchange.com/a/38367/12336"
 													(concat " @@latex:\\\\EntscheidungTag@@"))
 												 ((string= cat "D:")
 													(concat " @@latex:\\\\DecisionTag@@"))
-												 ((or (string= cat "I:") (string= cat "C:") (string= cat "B:"))
+												 ((or (string= cat "I:"))
 													(concat " @@latex:\\\\InformationTag@@"))
+												 ((or (string= cat "C:") (string= cat "B:"))
+													(concat " @@latex:\\\\ConsultationTag@@"))
 												 (t " @@latex:\\\\NoTag@@")
 												 )
 									 (concat "@@latex:{@@" name "@@latex:}@@"
@@ -154,10 +156,15 @@ Inspired by: https://emacs.stackexchange.com/a/38367/12336"
 													(concat " @@latex:\\\\DecisionTagMargin@@@@latex:{@@ "
 																	name
 																	"@@latex:}@@"))
-												 ((or (string= cat "I:") (string= cat "C:") (string= cat "B:"))
+												 ((or (string= cat "I:"))
 													(concat " @@latex:\\\\InformationTagMargin@@@@latex:{@@ "
 																	name
-																	"@@latex:}@@"))))))
+																	"@@latex:}@@"))
+												 ((or (string= cat "C:") (string= cat "B:"))
+													(concat " @@latex:\\\\ConsultationTagMargin@@@@latex:{@@ "
+																	name
+																	"@@latex:}@@"))
+												 ))))
 			 t ))	; fixed case
 		))
 
