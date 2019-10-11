@@ -9,7 +9,7 @@
 #+MINUTES_AUTHOR: John Doe
 #+MINUTES_CHAIR: Sue Parker
 # #+MINUTES_Participants:  Sue Parker 
-#+MINUTES_DRAFT_TEXT: DRAFT
+#+MINUTES_DRAFT_TEXT: DRAFT of \the\day.\the\month.\the\year 
 #+MINUTES_LATEX_STYLE: plain-minutes-style.tex
 #+MINUTES_OPTIONS: toc:t title:t 
 

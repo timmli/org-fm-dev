@@ -65,7 +65,7 @@
 		("MINUTES_PLACE" "#+LATEX_HEADER: \\place{%s}")
 		("MINUTES_PARTICIPANTS" "#+LATEX_HEADER: \\participants{%s}")
 		("MINUTES_DATE" "#+DATE: %s")
-		("MINUTES_DRAFT_TEXT" "#+LATEX_HEADER: \\SetWatermarkText{%s}")
+		("MINUTES_DRAFT_TEXT" "#+LATEX_HEADER: \\drafttext{%s}")
 		("MINUTES_OPTIONS" "#+OPTIONS: %s")
 		)
 	"Alist for mapping org-minutes keywords to LaTeX commands.

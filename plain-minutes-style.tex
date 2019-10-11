@@ -3,7 +3,7 @@
 \renewcommand{\familydefault}{\sfdefault}
 \usepackage{xcolor}
 \usepackage{draftwatermark}
-\SetWatermarkScale{1}
+\SetWatermarkScale{0.5}
 \usepackage{datetime}
 \usepackage{multicol}
 
@@ -39,6 +39,10 @@
 
 \newcommand\place[1]{\renewcommand\@place{#1}}
 \newcommand\@place{}
+
+\newcommand\drafttext[1]{\renewcommand\@drafttext{#1}}
+\newcommand\@drafttext{}
+\AtBeginDocument{\SetWatermarkText{\@drafttext}}
 
 \renewcommand\maketitle{
   ~\vspace{-1.1cm}\newline
