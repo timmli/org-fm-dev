@@ -31,11 +31,12 @@
 ;;; Example:
 ;; 1) John, Kim, Sue, Alexandra :: A first TOP
 ;;    - A: Peter :: Something to do.
-;;    - E: :: Decision made
+;;    - D: :: Decision made
 ;; 2) A second TOP
 ;;    - I: Sue :: Some information
-;;    - C: :: Cleared item
-;;    - ?:Open question regarding minutes:? 
+;;    - AC: :: Cleared agenda item
+;;    - ?:Open question regarding minutes:?
+;;    - N: This is a note outside the protocol.
 
 ;;; Usage:
 ;; Run `org-mintes-export' to export a heading that contains minutes.
