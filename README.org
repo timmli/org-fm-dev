@@ -23,12 +23,13 @@
 
 which means:
 - =<TYPE>= is the type of the item. There is a choice of item types built in:  
-   | <TYPE>       | description           |
-   |--------------+-----------------------|
+   | <TYPE>   | description           |
+   |----------+-----------------------|
    | =A:=, =[ ]=  | action/agenda         |
    | =D:=, =E:=   | decision/Entscheidung |
-   | =I:=         | information           |
+   | =I:=       | information           |
    | =C:=, =B:=   | consultation/Beratung |
+   | =N:=       | note                  |
    | =AC:=, =[X]= | cleared               |
 - =<NAMES>= is a comma-separated list of participant names.
 - =<SEPARATOR>= can be =::= or =||=.
@@ -55,6 +56,8 @@ There is a number of special =org-minutes= keywords that are used during export:
 Participants can be included using the drawer =:PARTICIPANTS-LIST:= which is assumed to contain exactly one list. The content of =:PARTICIPANTS-LIST:= will overwrite =#+MINUTES_PARTICIPANTS:=.
 
 *** Example
+
+See [[file:example.org][example.org]].
 
 *** Export
 
