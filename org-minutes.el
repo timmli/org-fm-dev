@@ -110,7 +110,7 @@ Inspired by: https://emacs.stackexchange.com/a/38367/12336"
 	"Replace all item tags with appropriate LaTeX commands."
 	(save-excursion
 		(while (re-search-forward
-						(org-minutes-make-regexp "\\(A:\\|AC:\\|E:\\|D:\\|I:\\|C:\\|B:\\|\\[ \\]\\|\\[X\\]\\)?")
+						(org-minutes-make-regexp "\\(A:\\|AC:\\|B:\\|C:\\|D:\\|E:\\|I:\\|N:\\|\\[ \\]\\|\\[X\\]\\)?")
 						nil t)
 			(replace-match
 			 (let ((indentation (match-string 1))
@@ -136,6 +136,8 @@ Inspired by: https://emacs.stackexchange.com/a/38367/12336"
 													(concat " @@latex:\\\\InformationTag@@"))
 												 ((or (string= cat "C:") (string= cat "B:"))
 													(concat " @@latex:\\\\ConsultationTag@@"))
+												 ((string= cat "N:")
+													(concat " @@latex:\\\\NoteTag@@"))
 												 (t " @@latex:\\\\NoTag@@")
 												 )
 									 (concat "@@latex:{@@" name "@@latex:}@@"
@@ -274,39 +276,47 @@ This function uses the regular `org-export-dispatcher'."
 				)
 			)))
 
-(defface org-minutes-information-face
-	'((t (
-				:box t
-						 :foreground "CornflowerBlue"
-						 :weight bold)))
-	"Face for the information type of minutes items.")
-
-(defface org-minutes-decision-face
-	'((t (
-				:box t
-						 :foreground "LimeGreen"
-						 :weight bold)))
-	"Face for the decision type of minutes items.")
-
-(defface org-minutes-cleared-agenda-face
-	'((t (
-				:inherit org-checkbox-done-text
-								 :box t
-								 :weight bold)))
-	"Face for the cleared type of minutes items.")
 
 (defface org-minutes-agenda-face
 	'((t (
 				:box t
-						 :foreground "red"
-						 :weight bold)))
+				:foreground "red"
+				:weight bold)))
 	"Face for the agenda type of minutes items.")
+
+(defface org-minutes-cleared-agenda-face
+	'((t (
+				:inherit org-checkbox-done-text
+				:box t
+				:weight bold)))
+	"Face for the cleared type of minutes items.")
+
+(defface org-minutes-decision-face
+	'((t (
+				:box t
+				:foreground "LimeGreen"
+				:weight bold)))
+	"Face for the decision type of minutes items.")
+
+(defface org-minutes-information-face
+	'((t (
+				:box t
+				:foreground "CornflowerBlue"
+				:weight bold)))
+	"Face for the information type of minutes items.")
+
+(defface org-minutes-note-face
+	'((t (
+				:box t
+				:foreground "orange"
+				:weight bold)))
+	"Face for the note type of minutes items.")
 
 (defface org-minutes-question-face
 	'((t (
 				:box t
-						 :foreground "orange"
-						 :weight bold)))
+				:foreground "orange"
+				:weight bold)))
 	"Face for the question type of minutes items.")
 
 (define-minor-mode org-minutes-minor-mode
@@ -314,11 +324,30 @@ This function uses the regular `org-export-dispatcher'."
 some useful faces for highlighting the type and assignment of
 org-minutes items."
 	:lighter " om"
+
+	(font-lock-add-keywords
+	 'org-mode
+	 `((,(org-minutes-make-regexp "\\(A:\\|\\[ \\]\\)")
+			(3 '(org-minutes-agenda-face))
+			)))
+
+	(font-lock-add-keywords
+	 'org-mode
+	 `((,(org-minutes-make-regexp "\\(AC:\\|\\[X\\]\\)")
+			(3 '(org-minutes-cleared-agenda-face))
+			)))
+
 	
 	(font-lock-add-keywords
 	 'org-mode
-	 `((,(org-minutes-make-regexp "\\(I:\\|C:\\|B:\\)?")
+	 `((,(org-minutes-make-regexp "\\(B:\\|C:\\|I:\\)?")
 			(3 '(org-minutes-information-face))
+			)))
+
+	(font-lock-add-keywords
+	 'org-mode
+	 `((,(org-minutes-make-regexp "D:")
+			(3 '(org-minutes-decision-face))
 			)))
 	
 	(font-lock-add-keywords
@@ -329,24 +358,10 @@ org-minutes items."
 
 	(font-lock-add-keywords
 	 'org-mode
-	 `((,(org-minutes-make-regexp "D:")
-			(3 '(org-minutes-decision-face))
+	 `((,(org-minutes-make-regexp "N:")
+			(3 '(org-minutes-note-face))
 			)))
-
-
-	(font-lock-add-keywords
-	 'org-mode
-	 `((,(org-minutes-make-regexp "\\(AC:\\|\\[X\\]\\)")
-			(3 '(org-minutes-cleared-agenda-face))
-			)))
-
-
-	(font-lock-add-keywords
-	 'org-mode
-	 `((,(org-minutes-make-regexp "\\(A:\\|\\[ \\]\\)")
-			(3 '(org-minutes-agenda-face))
-			)))
-
+	
 	(font-lock-add-keywords
 	 'org-mode
 	 `((,org-minutes-question-regexp

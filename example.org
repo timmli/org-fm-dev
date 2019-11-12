@@ -31,3 +31,4 @@
        - C: :: Consultation ?:Open question regarding minutes:?
              - Sue :: Sue's idea
              - Kim :: Kim's question
+       - N: :: This is a note. Outside the protocol or added later (with timestamp).  
