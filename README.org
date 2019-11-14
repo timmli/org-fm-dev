@@ -40,18 +40,19 @@ which means:
 
 There is a number of special =org-minutes= keywords that are used during export:
 
-| keywords                  | description |
-|---------------------------+-------------|
-| =#+MINUTES_TITLE:=        |  title of the document; used as =#+TITLE:= |
-| =#+MINUTES_EVENT:=       |  name of the event |
-| =#+MINUTES_PLACE:=       |  place of the event |
-| =#+MINUTES_DATE:=        |  date of the event; used as =#+DATE:= |
-| =#+MINUTES_AUTHOR:=      | name of minute taker; used as =#+AUTHOR:= |
-| =#+MINUTES_CHAIR:=       | chair of the event |
-| =#+MINUTES_DRAFT-TEXT:=  | text of the draft watermark  |
-| =#+MINUTES_PARTICIPANTS:= | names of participants |
-| =#+MINUTES_LATEX_STYLE:=  | name of \LaTeX style file |
-| =#+MINUTES_OPTIONS:=      | used as =#+OPTIONS:= |
+| keywords                | description                             |
+|-------------------------+-----------------------------------------|
+| =#+MINUTES_TITLE:=        | title of the document; used as =#+TITLE:= |
+| =#+MINUTES_EVENT:=        | name of the event                       |
+| =#+MINUTES_PLACE:=        | place of the event                      |
+| =#+MINUTES_DATE:=         | date of the event; used as =#+DATE:=      |
+| =#+MINUTES_AUTHOR:=       | name of minute taker; used as =#+AUTHOR:= |
+| =#+MINUTES_CHAIR:=        | chair of the event                      |
+| =#+MINUTES_DRAFT-TEXT:=   | text of the draft watermark             |
+| =#+MINUTES_PARTICIPANTS:= | names of participants                   |
+| =#+MINUTES_LANGUAGE:=     | language of minutes                     |
+| =#+MINUTES_LATEX_STYLE:=  | name of \LaTeX style file               |
+| =#+MINUTES_OPTIONS:=      | used as =#+OPTIONS:=                      |
 
 Participants can be included using the drawer =:PARTICIPANTS-LIST:= which is assumed to contain exactly one list. The content of =:PARTICIPANTS-LIST:= will overwrite =#+MINUTES_PARTICIPANTS:=.
 
