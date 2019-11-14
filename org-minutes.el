@@ -60,6 +60,7 @@
 (defvar org-minutes-keywords-latex-alist
 	'(("MINUTES_TITLE" "#+TITLE: %s")
 		("MINUTES_AUTHOR" "#+AUTHOR: %s")
+		("MINUTES_LANGUAGE" "#+LATEX_HEADER: \\newcommand{\\minuteslanguage}{%s}")
 		("MINUTES_LATEX_STYLE" "#+LATEX_HEADER: \\input{%s}")
 		("MINUTES_CHAIR" "#+LATEX_HEADER: \\chair{%s}")
 		("MINUTES_EVENT" "#+LATEX_HEADER: \\event{%s}")

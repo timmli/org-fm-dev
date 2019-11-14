@@ -6,10 +6,40 @@
 \SetWatermarkScale{0.5}
 \usepackage{datetime}
 \usepackage{multicol}
+\usepackage{etoolbox}
 
 \usepackage[left=20mm, right=45mm, top=15mm, bottom=20mm, marginparsep=10mm, marginparwidth=30mm, nohead]{geometry}
 
 % \pagenumbering{gobble}          % remove page numbering
+
+\usepackage[german,english]{babel} % the last language in the options is loaded; the other one can be chosen with \selectlanguage
+\usepackage{iflang}
+
+\newcommand{\eventword}{Event}
+\newcommand{\locationword}{Location}
+\newcommand{\dateword}{Date \& Time}
+\newcommand{\chairword}{Chair}
+\newcommand{\minutestakerword}{Minute taker}
+\newcommand{\participantsword}{Participants}
+
+%% special version of \selectlanguage that accepts macros as arguments
+\newcommand{\xselectlanguage}[1]{% 
+  \begingroup\edef\x{\endgroup
+    \noexpand\selectlanguage{#1}}\x
+}
+
+\ifdef{\minuteslanguage}{% ifdef requires etoolbox
+  \AtBeginDocument{\xselectlanguage{\minuteslanguage}
+    \IfLanguageName{german}{%
+      \renewcommand{\eventword}{Veranstaltung}
+      \renewcommand{\locationword}{Ort}
+      \renewcommand{\dateword}{Datum}
+      \renewcommand{\chairword}{Leitung}
+      \renewcommand{\minutestakerword}{Protokollführer}
+      \renewcommand{\participantsword}{Teilnehmer}
+    }{}
+  }
+}{}
 
 \usepackage{enumitem}
 \setlistdepth{10}
@@ -54,13 +84,13 @@
   {\raggedright
     \renewcommand{\baselinestretch}{1.2}\selectfont
     {\bfseries\LARGE \@title \\[1ex]}
-    {\large {\bfseries Veranstaltung:} \@event }\\
-    {\large {\bfseries Ort:} \@place }\\
-    {\large {\bfseries Datum:} \@date}\\[1ex]
-    {\large {\bfseries Leitung:} \@chair}\\
-    {\large {\bfseries Teilnehmer:} \begin{multicols}{2}\@participants\end{multicols}}%\\[1ex]
+    {\large {\bfseries \eventword:} \@event }\\
+    {\large {\bfseries \locationword:} \@place }\\
+    {\large {\bfseries \dateword:} \@date}\\[1ex]
+    {\large {\bfseries \chairword:} \@chair}\\
+    {\large {\bfseries \participantsword:} \begin{multicols}{2}\@participants\end{multicols}}%\\[1ex]
     
-    {\large {\bfseries Protokollführer:} \@author}\\[4ex]
+    {\large {\bfseries \minutestakerword:} \@author}\\[4ex]
   }
   
   \noindent\rule{\textwidth}{0.5pt}
