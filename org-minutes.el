@@ -329,48 +329,24 @@ org-minutes items."
 
 	(font-lock-add-keywords
 	 'org-mode
-	 `((,(org-minutes-make-regexp "\\(A:\\|\\[ \\]\\)")
-			(3 '(org-minutes-agenda-face))
-			)))
-
-	(font-lock-add-keywords
-	 'org-mode
-	 `((,(org-minutes-make-regexp "\\(AC:\\|\\[X\\]\\)")
-			(3 '(org-minutes-cleared-agenda-face))
-			)))
-
-	
-	(font-lock-add-keywords
-	 'org-mode
-	 `((,(org-minutes-make-regexp "\\(B:\\|C:\\|I:\\)?")
-			(3 '(org-minutes-information-face))
-			)))
-
-	(font-lock-add-keywords
-	 'org-mode
-	 `((,(org-minutes-make-regexp "D:")
-			(3 '(org-minutes-decision-face))
-			)))
-	
-	(font-lock-add-keywords
-	 'org-mode
-	 `((,(org-minutes-make-regexp "E:")
-			(3 '(org-minutes-decision-face))
-			)))
-
-	(font-lock-add-keywords
-	 'org-mode
-	 `((,(org-minutes-make-regexp "N:")
-			(3 '(org-minutes-note-face))
-			)))
-	
-	(font-lock-add-keywords
-	 'org-mode
 	 `((,org-minutes-question-regexp
 			(1 '(font-lock-comment-face))
 			(3 '(org-minutes-question-face))
-			(4 '(font-lock-comment-face))
-			)))
+			(4 '(font-lock-comment-face)))
+		 (,(org-minutes-make-regexp "\\(A:\\|\\[ \\]\\)")
+			(3 '(org-minutes-agenda-face)))
+		 (,(org-minutes-make-regexp "\\(AC:\\|\\[X\\]\\)")
+			(3 '(org-minutes-cleared-agenda-face)))
+		 (,(org-minutes-make-regexp "D:")
+			(3 '(org-minutes-decision-face)))
+		 (,(org-minutes-make-regexp "E:")
+			(3 '(org-minutes-decision-face)))
+		 (,(org-minutes-make-regexp "N:")
+			(3 '(org-minutes-note-face)))
+		 (,(org-minutes-make-regexp "\\(B:\\|C:\\|I:\\)?")
+			(3 '(org-minutes-information-face))))
+	 )
+
 	)
 
 ;; (add-hook 'org-mode-hook 'org-minutes-minor-mode)
