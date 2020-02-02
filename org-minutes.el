@@ -1,4 +1,4 @@
-;;; org-minutes.el --- faster minutes with org-minutes
+;;; org-minutes.el --- faster minutes with org-minutes -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2019 Timm Lichte
 
