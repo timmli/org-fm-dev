@@ -84,12 +84,14 @@
   {\raggedright
     \renewcommand{\baselinestretch}{1.2}\selectfont
     {\bfseries\LARGE \@title \\[1ex]}
+    \ActionTagMargin{=Action}
     {\large {\bfseries \eventword:} \@event }\\
+    \EntscheidungTagMargin{=Decision}
     {\large {\bfseries \locationword:} \@place }\\
+    \InformationTagMargin{=Information}
     {\large {\bfseries \dateword:} \@date}\\[1ex]
     {\large {\bfseries \chairword:} \@chair}\\
     {\large {\bfseries \participantsword:} \begin{multicols}{2}\@participants\end{multicols}}%\\[1ex]
-    
     {\large {\bfseries \minutestakerword:} \@author}\\[4ex]
   }
   
