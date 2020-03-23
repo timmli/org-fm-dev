@@ -3,7 +3,7 @@
 
 =org-minutes= supports taking and exporting minutes. =org-minutes= assumes a very simple but effective minutes format consisting of plain lists, where list items can be typed and assigned to participants using the dictionary notation of =org-mode= lists. 
 
-[[file:example.png]]
+[[file:example.png]] [[file:example-export.png]]
 
 ** Installation
 
