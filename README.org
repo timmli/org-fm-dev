@@ -7,7 +7,7 @@ Emacs screenshot:
 
 [[file:example.png]]
 
-Example of PDF export:
+Example of PDF export via LaTeX:
 
 [[file:example-export.png]]
 
