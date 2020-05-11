@@ -5,7 +5,7 @@
 #+MINUTES_TITLE: Minutes
 #+MINUTES_EVENT: Some event
 #+MINUTES_PLACE: Some place
-#+MINUTES_DATE: 01.07.2019, 12:15--13:45
+#+MINUTES_DATE: 11.05.2020 , 12:15--13:45
 #+MINUTES_AUTHOR: John Doe
 #+MINUTES_CHAIR: Sue Parker
 # #+MINUTES_Participants:  Sue Parker 
@@ -32,4 +32,4 @@
        - C: :: Consultation ?:Open question regarding minutes:?
              - Sue :: Sue's idea
              - Kim :: Kim's question
-       - N: :: This is a note. Outside the protocol or added later (with timestamp).  
+       - N: :: This is a visible note. Outside the protocol or added later (with timestamp). #:But this an invisible comment.:#  

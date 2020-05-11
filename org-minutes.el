@@ -50,6 +50,9 @@
 (defvar org-minutes-question-regexp
 	"\\(\\?\\(:\\||\\)\\)\\(.*?\\)\\(\\(:\\||\\)\\?\\)")
 
+(defvar org-minutes-comment-regexp
+	"\\(#\\(:\\||\\)\\)\\(.*?\\)\\(\\(:\\||\\)#\\)")
+
 (defun org-minutes-make-regexp (cat)
 	"Make regular expression for some category CAT of org-minutes items."
 	(concat
@@ -100,13 +103,18 @@ Inspired by: https://emacs.stackexchange.com/a/38367/12336"
 	(kill-line)
 	)
 
-(defun org-minutes-replace-questions-with-latex ()
-	"Replace all open questions with LaTeX command \OpenQuestion."
+(defun org-minutes-replace-inline-elements-with-latex ()
+	"Replace all inline questions and comments with LaTeX commands."
 	(save-excursion
 		(while (re-search-forward org-minutes-question-regexp nil t)
 			(replace-match
 			 (let ((scope (match-string 3)))
-				 (concat "@@latex:\\\\OpenQuestion{@@" scope "@@latex:}@@"))))))
+				 (concat "@@latex:\\\\OpenQuestion{@@" scope "@@latex:}@@")))))
+	(save-excursion
+		(while (re-search-forward org-minutes-comment-regexp nil t)
+			(replace-match
+			 (let ((scope (match-string 3)))
+				 (concat "@@latex:\\\\Comment{@@" scope "@@latex:}@@"))))))
 
 (defun org-minutes-replace-tags-with-latex ()
 	"Replace all item tags with appropriate LaTeX commands."
@@ -266,7 +274,7 @@ This function uses the regular `org-export-dispatcher'."
 				;; process document attributes
 				(org-minutes-insert-latex-header (org-minutes-convert-keywords))
 				;; process open questions
-				(org-minutes-replace-questions-with-latex)
+				(org-minutes-replace-inline-elements-with-latex)
 				;; process tagged items
 				(org-minutes-replace-tags-with-latex)
 				;; process untagged topics
@@ -321,6 +329,13 @@ This function uses the regular `org-export-dispatcher'."
 				:weight bold)))
 	"Face for the question type of minutes items.")
 
+(defface org-minutes-comment-face
+	'((t (
+				:inherit font-lock-comment-face
+				:box t
+				:weight bold)))
+	"Face for the comment type of minutes items.")
+
 (define-minor-mode org-minutes-minor-mode
 	"Minor mode for org-minutes. This minor mode makes available
 some useful faces for highlighting the type and assignment of
@@ -332,6 +347,10 @@ org-minutes items."
 	 `((,org-minutes-question-regexp
 			(1 '(font-lock-comment-face))
 			(3 '(org-minutes-question-face))
+			(4 '(font-lock-comment-face)))
+		 (,org-minutes-comment-regexp
+			(1 '(font-lock-comment-face))
+			(3 '(org-minutes-comment-face))
 			(4 '(font-lock-comment-face)))
 		 (,(org-minutes-make-regexp "\\(A:\\|\\[ \\]\\)")
 			(3 '(org-minutes-agenda-face)))
