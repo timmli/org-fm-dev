@@ -1,7 +1,7 @@
 
-* org-minutes
+* org-fm
 
-=org-minutes= supports taking and exporting minutes. =org-minutes= assumes a very simple but effective minutes format consisting of plain lists, where list items can be typed and assigned to participants using the dictionary notation of =org-mode= lists. 
+=org-fm= supports taking and exporting minutes. =org-fm= assumes a very simple but effective minutes format consisting of plain lists, where list items can be typed and assigned to participants using the dictionary notation of =org-mode= lists. 
 
 Emacs screenshot:
 
@@ -17,9 +17,9 @@ Example of PDF export via LaTeX:
 
 *** The basic list format  
 
-=org-minutes= consist of *one* arbitrarily deeply embedded list, where the topmost level is an enumeration (=1)=, =2)=, ...).  
+Minutes taken with =org-fm= consist of *one* arbitrarily deeply embedded list, where the topmost level is an enumeration (=1)=, =2)=, ...).  
 
-=org-minutes= items have the following structure
+=org-fm= items have the following structure
 
 #+BEGIN_EXAMPLE
 1) (I:? <TIMESTAMP>? <NAMES>? <SEPARATOR>)? <CONTENT>  
@@ -47,7 +47,7 @@ which means:
 
 *** Inline elements
 
-=org-minutes= also provides two types of inline elements:
+=org-fm= also provides two types of inline elements:
 
 | inline element            | description            |
 |---------------------------+------------------------|
@@ -56,7 +56,7 @@ which means:
 
 *** Keywords
 
-There is a number of special =org-minutes= keywords that are used during export:
+There is a number of special =org-fm= keywords that are used during export:
 
 | keywords                | description                             |
 |-------------------------+-----------------------------------------|
