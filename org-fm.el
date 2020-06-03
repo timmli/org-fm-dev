@@ -50,6 +50,9 @@
 (defvar org-fm-question-regexp
 	"\\(\\?\\(:\\||\\)\\)\\(.*?\\)\\(\\(:\\||\\)\\?\\)")
 
+(defvar org-fm-comment-regexp
+	"\\(#\\(:\\||\\)\\)\\(.*?\\)\\(\\(:\\||\\)#\\)")
+
 (defvar org-fm-abbreviation-escape-symbol
 	"##%s")
 
@@ -114,6 +117,19 @@ Inspired by: https://emacs.stackexchange.com/a/38367/12336"
 			(replace-match
 			 (let ((scope (match-string 3)))
 				 (concat "@@latex:\\\\OpenQuestion{@@" scope "@@latex:}@@"))))))
+
+(defun org-fm-replace-inline-elements-with-latex ()
+	"Replace all inline questions and comments with LaTeX commands."
+	(save-excursion
+		(while (re-search-forward org-fm-question-regexp nil t)
+			(replace-match
+			 (let ((scope (match-string 3)))
+				 (concat "@@latex:\\\\OpenQuestion{@@" scope "@@latex:}@@")))))
+	(save-excursion
+		(while (re-search-forward org-fm-comment-regexp nil t)
+			(replace-match
+			 (let ((scope (match-string 3)))
+				 (concat "@@latex:\\\\Comment{@@" scope "@@latex:}@@"))))))
 
 (defun org-fm-replace-tags-with-latex ()
 	"Replace all item tags with appropriate LaTeX commands."
@@ -339,8 +355,8 @@ This function uses the regular `org-export-dispatcher'."
 				(org-fm-clean-heading)
 				;; process document attributes
 				(org-fm-insert-latex-header (org-fm-convert-keywords))
-				;; process open questions
-				(org-fm-replace-questions-with-latex)
+				;; process inline elements
+				(org-fm-replace-inline-elements-with-latex)
 				;; process tagged items
 				(org-fm-replace-tags-with-latex)
 				;; process untagged topics
@@ -418,6 +434,13 @@ This function uses the regular `org-export-dispatcher'."
 				:weight bold)))
 	"Face for the question type of minutes items.")
 
+(defface org-fm-comment-face
+	'((t (
+				:inherit font-lock-comment-face
+				:box t
+				:weight bold)))
+	"Face for the comment type of minutes items.")
+
 (define-minor-mode org-fm-minor-mode
 	"Minor mode for org-fm. This minor mode makes available
 some useful faces for highlighting the type and assignment of
@@ -429,6 +452,10 @@ org-fm items."
 	 `((,org-fm-question-regexp
 			(1 '(font-lock-comment-face))
 			(3 '(org-fm-question-face))
+			(4 '(font-lock-comment-face)))
+		 (,org-fm-comment-regexp
+			(1 '(font-lock-comment-face))
+			(3 '(org-fm-comment-face))
 			(4 '(font-lock-comment-face)))
 		 (,(org-fm-make-regexp "\\(B:\\|C:\\|I:\\)?")
 			(3 '(org-fm-information-face) prepend))

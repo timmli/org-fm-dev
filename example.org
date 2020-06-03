@@ -5,7 +5,7 @@
 #+MINUTES_TITLE: Minutes
 #+MINUTES_EVENT: Some event
 #+MINUTES_PLACE: Some place
-#+MINUTES_DATE: 11.05.2020 , 12:15--13:45
+#+MINUTES_DATE: 03.06.2020, 12:15--13:45
 #+MINUTES_AUTHOR: John Doe
 #+MINUTES_CHAIR: Sue Parker
 # #+MINUTES_Participants:  Sue Parker 
@@ -34,3 +34,4 @@
              - KM :: Kim's question
        - N: [2020-06-03 Mi 10:39] :: This is a note. Outside the protocol or added later (with timestamp).
        - The expansion of abbreviations can be escaped: ##JD
+       - Inline comments can be included like this: #:This is an inline comment.:#  
