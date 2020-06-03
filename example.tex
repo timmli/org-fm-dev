@@ -1,4 +1,4 @@
-% Created 2020-03-25 Mi 22:25
+% Created 2020-06-03 Mi 11:39
 % Intended LaTeX compiler: pdflatex
 \documentclass[11pt]{article}
 \usepackage[utf8]{inputenc}
@@ -15,12 +15,12 @@
 \usepackage{capt-of}
 \usepackage{hyperref}
 \newcommand{\minuteslanguage}{english}
-\input{org-minutes-latex-style-plain.tex}
+\input{org-fm-latex-style-plain.tex}
 \chair{Sue Parker}
 \event{Some event}
 \place{Some place}
 \drafttext{DRAFT of \the\day.\the\month.\the\year}
-\participants{\begin{itemize}\item{$\boxtimes$} John Doe\item{$\boxtimes$} Kim Miller\item{$\boxtimes$} Sue Parker\item{$\square$} Peter Smith\item{$\boxtimes$} Alexandra West\end{itemize}}
+\participants{\begin{itemize}\item{$\boxtimes$} John Doe\item{$\boxtimes$} Kim Miller\item{$\boxtimes$} Susan Parker\item{$\square$} Peter Smith\item{$\boxtimes$} Alexandra West\end{itemize}}
 \author{John Doe}
 \date{01.07.2019, 12:15--13:45}
 \title{Minutes}
@@ -37,23 +37,24 @@
 \tableofcontents
 
 
-\section{\texorpdfstring{\InformationTagTOPMargin{John, Kim, Sue, Alexandra}}{}A first TOP}
-\label{sec:org4f4cd7e}
+\section{\texorpdfstring{\InformationTagTOPMargin{John, Miller, Sue, Pete}}{}A first TOP}
+\label{sec:orgaac495b}
 \begin{itemize}
-\item \ActionTag{Peter}{::} \ActionTagMargin{Peter}Something to do.
+\item \ActionTag{Sue}{::} \ActionTagMargin{Sue}Something to do.
 \item \ActionTag{}{::} \ActionTagMargin{}Again something to do.
 \item \EntscheidungTag{}{::} \EntscheidungTagMargin{ }Decision made
 \end{itemize}
 \section{A second TOP}
-\label{sec:org2a0e34c}
+\label{sec:orgd22c266}
 \begin{itemize}
-\item \ClearedTag{}{::} \ClearedTagMargin{ }Cleared item
+\item \ClearedTag{Alexandra}{::} \ClearedTagMargin{ Alexandra}Cleared item
 \item \ClearedTag{}{::} \ClearedTagMargin{ }Another cleared item
 \item \ConsultationTag{}{::} \ConsultationTagMargin{ }Consultation \OpenQuestion{Open question regarding minutes}
 \begin{itemize}
 \item \NoTag{Sue}{::}Sue's idea
-\item \NoTag{Kim}{::}Kim's question
+\item \NoTag{Miller}{::}Kim's question
 \end{itemize}
 \item \NoteTag{}{::}This is a note. Outside the protocol or added later (with timestamp).
+\item The expansion of abbreviations can be escaped: JD
 \end{itemize}
 \end{document}

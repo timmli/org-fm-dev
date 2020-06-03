@@ -11,25 +11,26 @@
 # #+MINUTES_Participants:  Sue Parker 
 #+MINUTES_DRAFT_TEXT: DRAFT of \the\day.\the\month.\the\year
 #+MINUTES_LANGUAGE: english
-#+MINUTES_LATEX_STYLE: org-minutes-latex-style-plain.tex
+#+MINUTES_LATEX_STYLE: org-fm-latex-style-plain.tex
 #+MINUTES_OPTIONS: toc:t title:t 
 
 :PARTICIPANTS-LIST:
-- [X] John Doe
-- [X] Kim Miller
-- [X] Sue Parker
-- [ ] Peter Smith
+- [X] John Doe [JD=John]
+- [X] Kim Miller [KM]
+- [X] Susan Parker [SP=Sue]
+- [ ] Peter Smith [PS=Pete]
 - [X] Alexandra West
 :END:
 
-1) John, Kim, Sue, Alexandra :: A first TOP
-       - A: Peter :: Something to do.
+1) JD, KM, SP, PS :: A first TOP
+       - A: SP :: Something to do.
        - [ ] :: Again something to do.
        - E: :: Decision made
-2) A second TOP
-       - AC: :: Cleared item
+2) A second TOP 
+       - AC: Alexandra :: Cleared item
        - [X] :: Another cleared item 
        - C: :: Consultation ?:Open question regarding minutes:?
-             - Sue :: Sue's idea
-             - Kim :: Kim's question
-       - N: :: This is a note. Outside the protocol or added later (with timestamp).  
+             - SP :: Sue's idea
+             - KM :: Kim's question
+       - N: [2020-06-03 Mi 10:39] :: This is a note. Outside the protocol or added later (with timestamp).
+       - The expansion of abbreviations can be escaped: ##JD

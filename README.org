@@ -22,11 +22,11 @@ Example of PDF export via LaTeX:
 =org-minutes= items have the following structure
 
 #+BEGIN_EXAMPLE
-1) (I:? <NAMES>? <SEPARATOR>)? <CONTENT>  
+1) (I:? <TIMESTAMP>? <NAMES>? <SEPARATOR>)? <CONTENT>  
 #+END_EXAMPLE
 
 #+BEGIN_EXAMPLE
-- (<TYPE>? <NAMES>? <SEPARATOR>)? <CONTENT>
+- (<TYPE>? <TIMESTAMP>? <NAMES>? <SEPARATOR>)? <CONTENT>
 #+END_EXAMPLE
 
 which means:
@@ -39,9 +39,10 @@ which means:
    | =C:=, =B:=   | consultation/Beratung |
    | =N:=       | note                  |
    | =AC:=, =[X]= | cleared               |
+- =<TIMESTAMP>= is an (inactive) =org-timestamp=.
 - =<NAMES>= is a comma-separated list of participant names.
 - =<SEPARATOR>= can be =::= or =||=.
-- When =<TYPE>= or =<NAMES>= are given, there also has to be a =<SEPARATOR>=.
+- When =<TYPE>=, =<TIMESTAMP>= or =<NAMES>= are given, there also has to be a =<SEPARATOR>=.
 - When =<NAMES>= but not =<TYPE>= is given, the implicit type will be =I:= (information).
 
 *** Keywords
@@ -72,6 +73,29 @@ See [[file:example.org][example.org]].
 
 ** Plans
 
-- [ ] add easy way to include the time
+- [X] add easy way to include the time
+- [X] add automatic expansion of abbreviations
+      - instad using links? https://en.wikibooks.org/wiki/LaTeX/Hyperlinks#Hyperlink_and_Hypertarget
+            - Full name is given in the link label.
 - [ ] activate faces only in headings with minutes?
-- [ ] abbreviation management system?
+- [ ] check in and ckeck out participants
+
+#+BEGIN_SRC emacs-lisp
+(org-narrow-to-element)
+(choose-item)
+(add-subitem-with-timestamp-etc)
+
+(defun helm-org-fm-checkout-participant ()
+  ""
+  (helm :sources (helm-build-in-buffer-source "org-fm participants"
+                   :data (current-buffer)
+                   :candidate-transformer (lambda (candidates)
+																						(progn
+																							(forward-line 1)
+																							(beginning-of-line)
+																							(cl-loop for c in candidates
+																											 when (string-match "^[[:blank:]]*-[[:blank:]]+\\[.\\].*" c)
+																											 collect c)))
+									 :get-line #'buffer-substring)
+				:buffer "*helm org-fm*"))
+#+END_SRC
