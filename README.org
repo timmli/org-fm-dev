@@ -45,6 +45,15 @@ which means:
 - When =<TYPE>=, =<TIMESTAMP>= or =<NAMES>= are given, there also has to be a =<SEPARATOR>=.
 - When =<NAMES>= but not =<TYPE>= is given, the implicit type will be =I:= (information).
 
+*** Inline elements
+
+=org-minutes= also provides two types of inline elements:
+
+| inline element            | description            |
+|---------------------------+------------------------|
+| enclosed by =?:= and =:?= | question about minutes |
+| enclosed by =#:= and =:#= | private comment        |
+
 *** Keywords
 
 There is a number of special =org-minutes= keywords that are used during export:

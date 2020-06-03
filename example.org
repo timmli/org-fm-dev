@@ -5,7 +5,7 @@
 #+MINUTES_TITLE: Minutes
 #+MINUTES_EVENT: Some event
 #+MINUTES_PLACE: Some place
-#+MINUTES_DATE: 01.07.2019, 12:15--13:45
+#+MINUTES_DATE: 11.05.2020 , 12:15--13:45
 #+MINUTES_AUTHOR: John Doe
 #+MINUTES_CHAIR: Sue Parker
 # #+MINUTES_Participants:  Sue Parker 
