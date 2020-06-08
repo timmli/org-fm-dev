@@ -99,13 +99,15 @@ The export is triggered with =org-fm-export=.
 
 *** Timestamps
 
-Timestamps are located after =<TYPE>= and before =<NAMES>=:
+Items may contain an inactive =org-timestamp=, which is located after =<TYPE>= and before =<NAMES>=:
 
 #+BEGIN_EXAMPLE
-- N: <2020-06-08 Mo 12:18> :: This is a note.
+- N: [2020-06-08 Mo 12:18] :: This is a note.
 #+END_EXAMPLE 
 
 Timestamps can be inserted or updated with =org-fm-add-or-update-timestamp=.
+
+Timestamps are not exported with =org-fm-export=.
 
 ** Plans
 
