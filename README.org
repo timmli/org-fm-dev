@@ -74,17 +74,44 @@ There is a number of special =org-fm= keywords that are used during export:
 
 Participants can be included using the drawer =:PARTICIPANTS-LIST:= which is assumed to contain exactly one list. The content of =:PARTICIPANTS-LIST:= will overwrite =#+MINUTES_PARTICIPANTS:=.
 
+*** Automatic abbreviation expansion
+
+=org-fm= lets you easily define abbreviations of participant names that are expanded during export.
+
+Within =:PARTICIPANTS-LIST:=, abbreviations (and optionally expansions) can be specified in square brackets:
+
+#+BEGIN_EXAMPLE
+- [X] Susan Parker [SP=Sue]
+- [ ] Kim Miller [KM]
+#+END_EXAMPLE 
+
+When no expansion is given, either the part preceding a comma (=,=) or the last word in the preceding name will be used.
+
 *** Example
 
 See [[file:example.org][example.org]].
 
 *** Export
 
+The export is triggered with =org-fm-export=.
+
+=org-fm-export= will first copy the content of the =org-mode= heading at point into a temporary buffer, perform a couple of replacements and then call =org-export-dispatch=. 
+
+*** Timestamps
+
+Timestamps are located after =<TYPE>= and before =<NAMES>=:
+
+#+BEGIN_EXAMPLE
+- N: <2020-06-08 Mo 12:18> :: This is a note.
+#+END_EXAMPLE 
+
+Timestamps can be inserted or updated with =org-fm-add-or-update-timestamp=.
+
 ** Plans
 
 - [X] add easy way to include the time
 - [X] add automatic expansion of abbreviations
-      - instad using links? https://en.wikibooks.org/wiki/LaTeX/Hyperlinks#Hyperlink_and_Hypertarget
+      - instad use links? https://en.wikibooks.org/wiki/LaTeX/Hyperlinks#Hyperlink_and_Hypertarget
             - Full name is given in the link label.
 - [ ] activate faces only in headings with minutes?
 - [ ] check in and ckeck out participants
