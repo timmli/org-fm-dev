@@ -297,7 +297,8 @@ and replace abbreviations with names in the subsequent org-fm items."
 											(beginning-of-line)
 											(if (eq (car (org-element-at-point)) 'plain-list)
 													(org-fm-make-abbreviation-hash 
-													 (mapcar 'car (cdr (org-list-to-lisp)))))))))
+													 (mapcar 'car (cdr (org-list-to-lisp))))))))
+					(case-fold-search nil)) ; make re-search-forward case sensitive
 			(if (re-search-forward "^[[:blank:]]*[0-9]+)[[:blank:]]" nil t)
 					(dolist (key (hash-table-keys abrv-hash))
 						(save-excursion

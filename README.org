@@ -85,7 +85,9 @@ Within =:PARTICIPANTS-LIST:=, abbreviations (and optionally expansions) can be s
 - [ ] Kim Miller [KM]
 #+END_EXAMPLE 
 
-When no expansion is given, either the part preceding a comma ( =,= ) or the last word in the preceding name will be used.
+When no expansion is given, either the part preceding a comma (,) or the last word in the preceding name will be used.
+
+One can mask abbreviations (and suppress their expansion) by prefixing it with  =#, which will be removed during expansion.=
 
 *** Example
 
