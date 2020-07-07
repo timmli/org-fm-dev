@@ -33,5 +33,5 @@
              - SP :: Sue's idea
              - KM :: Kim's question
        - N: [2020-06-03 Mi 10:39] :: This is a note. Outside the protocol or added later (with timestamp).
-       - The expansion of abbreviations can be escaped: ##JD
+       - The expansion of abbreviations can be escaped with =##=: ##JD
        - Inline comments can be included like this: #:This is an inline comment.:#  
