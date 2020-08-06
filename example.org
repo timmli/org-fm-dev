@@ -12,7 +12,7 @@
 #+MINUTES_DRAFT_TEXT: DRAFT of \the\day.\the\month.\the\year
 #+MINUTES_LANGUAGE: english
 #+MINUTES_LATEX_STYLE: org-fm-latex-style-plain.tex
-#+MINUTES_OPTIONS: toc:t title:t 
+#+MINUTES_OPTIONS: toc:t title:t ':t
 
 :PARTICIPANTS-LIST:
 - [X] John Doe [JD=John]

@@ -65,7 +65,7 @@
 	 "\\(?:[[:blank:]]*\\("
 	 org-element--timestamp-regexp
 	 "\\)\\)?"
-	 "[[:blank:]]*\\(.*?\\)[[:blank:]]+\\(::\\|||\\)\\) "))
+	 "[[:blank:]]*\\(.*?\\)[[:blank:]]+\\(::\\|||\\)\\)[[:space:]]"))
 
 (defvar org-fm-keywords-latex-alist
 	'(("MINUTES_TITLE" "#+TITLE: %s")
