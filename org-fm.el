@@ -163,7 +163,7 @@ Inspired by: https://emacs.stackexchange.com/a/38367/12336"
 												 ((or (string= cat "C:") (string= cat "B:"))
 													(concat " @@latex:\\\\ConsultationTag@@"))
 												 ((string= cat "N:")
-													(concat " @@latex:\\\\NoteTag@@"))
+													(concat " @@latex:\\\\NoteTag{@@" time "@@latex:}@@"))
 												 (t " @@latex:\\\\NoTag@@")
 												 )
 									 (concat "@@latex:{@@" name "@@latex:}@@"
