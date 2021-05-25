@@ -109,7 +109,7 @@ Items may contain an inactive =org-timestamp=, which is located after =<TYPE>= a
 
 Timestamps can be inserted or updated with =org-fm-add-or-update-timestamp=.
 
-Timestamps are not exported with =org-fm-export=.
+Timestamps are not exported with =org-fm-export= except for the note type (=N:=).
 
 ** Plans
 
