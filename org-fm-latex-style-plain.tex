@@ -92,8 +92,9 @@
     {\large {\bfseries \dateword:} \@date}\\
     \InformationTagMargin{=Information}
     {\large {\bfseries \chairword:} \@chair}\\
+    \NoteTagMargin{=Note}
+    {\large {\bfseries \minutestakerword:} \@author}\\
     {\large {\bfseries \participantsword:} \begin{multicols}{2}\@participants\end{multicols}}%\\[1ex]
-    {\large {\bfseries \minutestakerword:} \@author}\\[4ex]
   }
   
   \noindent\rule{\textwidth}{0.5pt}
@@ -137,4 +138,5 @@
 \newcommand{\DecisionTagMargin}[1]{\protect\marginnote{\colorbox{green}{D} #1}}
 \newcommand{\InformationTagMargin}[1]{\protect\marginnote{\colorbox{blue!20}{I} #1}}
 \newcommand{\InformationTagTOPMargin}[1]{\protect\marginpar{\colorbox{blue!20}{I} #1}}
+\newcommand{\NoteTagMargin}[1]{\protect\marginnote{\colorbox{orange}{N} #1}}
 \newcommand{\ConsultationTagMargin}[1]{\protect\marginnote{\colorbox{blue!20}{C} #1}}
