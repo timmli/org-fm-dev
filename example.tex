@@ -1,4 +1,4 @@
-% Created 2020-06-03 Mi 12:29
+% Created 2021-09-29 Wed 17:23
 % Intended LaTeX compiler: pdflatex
 \documentclass[11pt]{article}
 \usepackage[utf8]{inputenc}
@@ -19,8 +19,8 @@
 \chair{Sue Parker}
 \event{Some event}
 \place{Some place}
-\drafttext{DRAFT of \the\day.\the\month.\the\year}
-\participants{\begin{itemize}\item{$\boxtimes$} John Doe\item{$\boxtimes$} Kim Miller\item{$\boxtimes$} Susan Parker\item{$\square$} Peter Smith\item{$\boxtimes$} Alexandra West\end{itemize}}
+\drafttext{DRAFT of \the\day.\the\month.\the\year \currenttime}
+\participants{\begin{itemize}\item[{$\boxtimes$}] John Doe\item[{$\boxtimes$}] Kim Miller\item[{$\boxtimes$}] Susan Parker\item[{$\square$}] Peter Smith\item[{$\boxtimes$}] Alexandra West\end{itemize}}
 \author{John Doe}
 \date{03.06.2020, 12:15--13:45}
 \title{Minutes}
@@ -29,7 +29,7 @@
  pdftitle={Minutes},
  pdfkeywords={},
  pdfsubject={},
- pdfcreator={Emacs 26.3 (Org mode 9.3.6)}, 
+ pdfcreator={Emacs 27.1 (Org mode 9.4.6)}, 
  pdflang={English}}
 \begin{document}
 
@@ -38,14 +38,14 @@
 
 
 \section{\texorpdfstring{\InformationTagTOPMargin{John, Miller, Sue, Pete}}{}A first TOP}
-\label{sec:org1b0394b}
+\label{sec:orge8e7c9c}
 \begin{itemize}
 \item \ActionTag{Sue}{::} \ActionTagMargin{Sue}Something to do.
 \item \ActionTag{}{::} \ActionTagMargin{}Again something to do.
 \item \EntscheidungTag{}{::} \EntscheidungTagMargin{ }Decision made
 \end{itemize}
 \section{A second TOP}
-\label{sec:org6dc9dbe}
+\label{sec:org20ad65b}
 \begin{itemize}
 \item \ClearedTag{Alexandra}{::} \ClearedTagMargin{ Alexandra}Cleared item
 \item \ClearedTag{}{::} \ClearedTagMargin{ }Another cleared item
@@ -54,8 +54,8 @@
 \item \NoTag{Sue}{::}Sue's idea
 \item \NoTag{Miller}{::}Kim's question
 \end{itemize}
-\item \NoteTag{}{::}This is a note. Outside the protocol or added later (with timestamp).
-\item The expansion of abbreviations can be escaped: JD
+\item \NoteTag{\textit{[2020-06-03 Wed 10:39]}}{}{::}This is a note. Outside the protocol or added later (with timestamp).
+\item The expansion of abbreviations can be escaped with \#{}\#: JD
 \item Inline comments can be included like this: \Comment{This is an inline comment.}
 \end{itemize}
 \end{document}
