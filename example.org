@@ -9,7 +9,7 @@
 #+MINUTES_AUTHOR: John Doe
 #+MINUTES_CHAIR: Sue Parker
 # #+MINUTES_Participants:  Sue Parker 
-#+MINUTES_DRAFT_TEXT: DRAFT of \the\day.\the\month.\the\year \currenttime
+#+MINUTES_DRAFT_TEXT: DRAFT of \the\day.\the\month.\the\year\ \currenttime
 #+MINUTES_LANGUAGE: english
 #+MINUTES_LATEX_STYLE: org-fm-latex-style-plain.tex
 #+MINUTES_OPTIONS: toc:t title:t ':t
