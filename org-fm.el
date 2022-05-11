@@ -492,6 +492,11 @@ org-fm items."
 			(while (re-search-forward "„\\|“\\|”" nil t)
 				(replace-match "\"")
 				(setq count2 (1+ count2)))
+			;; Replace quote symbols
+			(goto-char (point-min))
+			(while (re-search-forward "’" nil t)
+				(replace-match "'")
+				(setq count2 (1+ count2)))
 			(message (format "org-fm-clean-text: removed %d chars, replaced %d chars" count1 count2))))
 	) 
 
