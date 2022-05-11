@@ -476,6 +476,26 @@ org-fm items."
 
 ;; (add-hook 'org-mode-hook 'org-fm-minor-mode)
 
+(defun org-fm-clean-text ()
+	"Remove or replace symbols that cause troubles during a LaTeX export."
+	(interactive)
+	(save-excursion
+		(let ((count1 0)
+					(count2 0))
+			;; Remove zero-width space
+			(goto-char (point-min))
+			(while (re-search-forward "​" nil t)
+				(replace-match "")
+				(setq count1 (1+ count1)))
+			;; Replace quote symbols
+			(goto-char (point-min))
+			(while (re-search-forward "„\\|“\\|”" nil t)
+				(replace-match "\"")
+				(setq count2 (1+ count2)))
+			(message (format "org-fm-clean-text: removed %d chars, replaced %d chars" count1 count2))))
+	) 
+
+
 (provide 'org-fm)
 
 ;;; org-fm.el ends here
