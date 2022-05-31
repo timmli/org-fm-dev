@@ -127,6 +127,8 @@
   \colorbox{orange}{?} {\color{orange}#1}%
   \addcontentsline{toc}{subsection}{%
     \texorpdfstring{\colorbox{orange}{?} {\color{orange}#1}}{?: #1}}}
+\newcommand{\Alert}[1]{%
+  {\color{red}#1}}%
 \newcommand{\ActionTag}[2]{%
   \addcontentsline{toc}{subsection}{\texorpdfstring{\colorbox{red}{A} #1}{A: #1}}%
   \colorbox{red}{A} #1 $#2$ }
