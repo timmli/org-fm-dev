@@ -50,6 +50,9 @@
 (defvar org-fm-question-regexp
 	"\\(\\?\\(:\\||\\)\\)\\(.*?\\)\\(\\(:\\||\\)\\?\\)")
 
+(defvar org-fm-alert-regexp
+	"\\(!\\(:\\||\\)\\)\\(.*?\\)\\(\\(:\\||\\)!\\)")
+
 (defvar org-fm-comment-regexp
 	"\\(#\\(:\\||\\)\\)\\(.*?\\)\\(\\(:\\||\\)#\\)")
 
@@ -125,6 +128,11 @@ Inspired by: https://emacs.stackexchange.com/a/38367/12336"
 			(replace-match
 			 (let ((scope (match-string 3)))
 				 (concat "@@latex:\\\\OpenQuestion{@@" scope "@@latex:}@@")))))
+	(save-excursion
+		(while (re-search-forward org-fm-alert-regexp nil t)
+			(replace-match
+			 (let ((scope (match-string 3)))
+				 (concat "@@latex:\\\\Alert{@@" scope "@@latex:}@@")))))
 	(save-excursion
 		(while (re-search-forward org-fm-comment-regexp nil t)
 			(replace-match
@@ -435,6 +443,13 @@ This function uses the regular `org-export-dispatcher'."
 				:weight bold)))
 	"Face for the question type of minutes items.")
 
+(defface org-fm-alert-face
+	'((t (
+				:foreground "red"
+				:weight bold)))
+	"Face for the alert type of minutes items.")
+
+
 (defface org-fm-comment-face
 	'((t (
 				:inherit font-lock-comment-face
@@ -453,6 +468,10 @@ org-fm items."
 	 `((,org-fm-question-regexp
 			(1 '(font-lock-comment-face))
 			(3 '(org-fm-question-face))
+			(4 '(font-lock-comment-face)))
+		 (,org-fm-alert-regexp
+			(1 '(font-lock-comment-face))
+			(3 '(org-fm-alert-face))
 			(4 '(font-lock-comment-face)))
 		 (,org-fm-comment-regexp
 			(1 '(font-lock-comment-face))
