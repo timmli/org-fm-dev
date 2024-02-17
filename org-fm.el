@@ -45,7 +45,6 @@
 ;;; Code:
 
 (require 'org)
-(require 'loop)
 
 (defvar org-fm-question-regexp
 	"\\(\\?\\(:\\||\\)\\)\\(.*?\\)\\(\\(:\\||\\)\\?\\)")
