@@ -256,9 +256,10 @@ Inspired by: https://emacs.stackexchange.com/a/38367/12336"
 			(goto-char (point-min))
 			(end-of-line)
 			(newline))
-		(loop-for-each key (mapcar 'car org-fm-keywords-latex-alist)
-			(when (assoc key keyword-latex-alist)
-				(insert (car (cdr (assoc key keyword-latex-alist))))))
+		(cl-loop
+		 for key in (mapcar 'car org-fm-keywords-latex-alist)
+		 do (when (assoc key keyword-latex-alist)
+					(insert (car (cdr (assoc key keyword-latex-alist))))))
 		;; process & delete drawer PARTICPANTS-LIST
 		(insert
 		 (let ((participants-list (org-fm-convert-participants-list))
