@@ -5,7 +5,7 @@
 ;; Author: Timm Lichte <timm.lichte@uni-tuebingen.de>
 ;; URL: https://github.com/timmli/org-fm-dev/blob/master/org-fm.el
 ;; Version: 0
-;; Last modified: 2024-06-15 Sat 21:39:37
+;; Last modified: 2024-06-15 Sat 22:19:17
 ;; Package-Requires: ((org-mode "9"))
 ;; Keywords: Org
 
@@ -89,6 +89,69 @@
    "\\)\\)?"
    "[[:blank:]]*\\(.*?\\)[[:blank:]]+\\(::\\|||\\)\\)[[:space:]]"))
 
+
+;;====================
+;;
+;; Manipulate items
+;;
+;;--------------------
+
+(defun org-fm-add-or-update-timestamp ()
+  "Add or update timestamp in org-fm item at point."
+  (interactive)
+  (save-excursion
+    (beginning-of-line)
+    (if (org-at-item-p)
+        (if (looking-at (org-fm-make-regexp "\\([A-Z]+:\\)?"))
+            (if (match-beginning 5)     ; update timestamp
+                (progn (goto-char (match-beginning 5))
+                       (delete-region (match-beginning 5) (match-end 5))
+                       (org-insert-time-stamp (org-current-time) t t))
+              (if (match-beginning 4)   ; insert new timestamp after cat
+                  (progn (goto-char (match-end 4))
+                         (insert " ")
+                         (org-insert-time-stamp (org-current-time) t t))
+                (if (match-beginning 2) ; insert new timestamp after mark
+                    (progn (goto-char (match-end 2))
+                           (insert " ")
+                           (org-insert-time-stamp (org-current-time) t t)))))
+          (progn (org-beginning-of-line) ; insert new timestamp and separator
+                 (org-insert-time-stamp (org-current-time) t t)
+                 (insert " :: ")
+                 ))
+      (message "org-fm: no item at point!"))))
+
+(defun org-fm-clean-text ()
+  "Remove or replace symbols that may cause troubles during a LaTeX
+  export."
+  (interactive)
+  (save-excursion
+    (let ((count1 0)
+          (count2 0))
+      ;; Remove zero-width space
+      (goto-char (point-min))
+      (while (re-search-forward "​" nil t)
+        (replace-match "")
+        (setq count1 (1+ count1)))
+      ;; Replace quote symbols
+      (goto-char (point-min))
+      (while (re-search-forward "„\\|“\\|”" nil t)
+        (replace-match "\"")
+        (setq count2 (1+ count2)))
+      ;; Replace quote symbols
+      (goto-char (point-min))
+      (while (re-search-forward "’" nil t)
+        (replace-match "'")
+        (setq count2 (1+ count2)))
+      (message (format "org-fm-clean-text: removed %d chars, replaced %d chars" count1 count2))))) 
+
+
+;;====================
+;;
+;; Export to LaTeX
+;;
+;;--------------------
+
 (defvar org-fm-keywords-latex-alist
   '(("MINUTES_TITLE" "#+TITLE: %s")
     ("MINUTES_AUTHOR" "#+AUTHOR: %s")
@@ -129,8 +192,7 @@ Inspired by: https://emacs.stackexchange.com/a/38367/12336"
   ;; remove root heading
   (org-back-to-heading)
   (org-show-subtree)
-  (kill-line)
-  )
+  (kill-line))
 
 (defun org-fm-replace-questions-with-latex ()
   "Replace all open questions with LaTeX command \OpenQuestion."
@@ -254,8 +316,7 @@ Inspired by: https://emacs.stackexchange.com/a/38367/12336"
                              ;;      "\n"))
                              )
                            )))))
-      keyword-alist-output
-      )))
+      keyword-alist-output)))
 
 (defun org-fm-convert-participants-list ()
   "Convert drawer PARTICIPANTS-LIST to LaTeX string."
@@ -293,8 +354,50 @@ Inspired by: https://emacs.stackexchange.com/a/38367/12336"
        ;;                    keyword-latex)
        ;;     "\n")))
        ))
-    (org-drawer-delete "PARTICIPANTS-LIST")
-    ))
+    (org-drawer-delete "PARTICIPANTS-LIST")))
+
+(defun org-fm-export ()
+  "Export minutes in org-fm format.
+This function uses the regular `org-export-dispatcher'."
+  (interactive)
+  (save-excursion
+    (progn
+      (org-back-to-heading)
+      (set-mark-command nil)
+      (org-next-visible-heading 1)
+      (if (org-at-heading-p) (previous-line)))
+    (when (use-region-p)
+      (copy-to-buffer "*Minutes*" (region-beginning) (region-end))
+      (deactivate-mark)
+      (let ((buffer (buffer-name)))
+        (switch-to-buffer "*Minutes*")
+        (org-mode)
+        (beginning-of-buffer)
+        ;; replace abbreviations with names
+        (org-fm-expand-abbreviations)
+        (org-fm-remove-abbreviations-from-partlist)
+        (org-fm-remove-abbreviation-escape)
+        ;; clean up root heading
+        (org-fm-clean-heading)
+        ;; process document attributes
+        (org-fm-insert-latex-header (org-fm-convert-keywords))
+        ;; process inline elements
+        (org-fm-replace-inline-elements-with-latex)
+        ;; process tagged items
+        (org-fm-replace-tags-with-latex)
+        ;; process untagged topics
+        (org-fm-replace-untagged-with-latex)
+        ;; dispatch export and go back to original buffer
+        (deactivate-mark)
+        (org-export-dispatch)
+        (switch-to-buffer buffer)
+        ))))
+
+;;====================
+;;
+;; Particiant list
+;;
+;;--------------------
 
 (defun org-fm-make-abbreviation-hash (partlist)
   "Convert a list of of participants (strings) to a hash of abbreviations to names."
@@ -358,68 +461,11 @@ and replace abbreviations with names in the subsequent org-fm items."
         (while (search-forward (format org-fm-abbreviation-escape-symbol "") nil t)
           (replace-match "")))))
 
-
-(defun org-fm-export ()
-  "Export minutes in org-fm format.
-This function uses the regular `org-export-dispatcher'."
-  (interactive)
-  (save-excursion
-    (progn
-      (org-back-to-heading)
-      (set-mark-command nil)
-      (org-next-visible-heading 1)
-      (if (org-at-heading-p) (previous-line)))
-    (when (use-region-p)
-      (copy-to-buffer "*Minutes*" (region-beginning) (region-end))
-      (deactivate-mark)
-      (let ((buffer (buffer-name)))
-        (switch-to-buffer "*Minutes*")
-        (org-mode)
-        (beginning-of-buffer)
-        ;; replace abbreviations with names
-        (org-fm-expand-abbreviations)
-        (org-fm-remove-abbreviations-from-partlist)
-        (org-fm-remove-abbreviation-escape)
-        ;; clean up root heading
-        (org-fm-clean-heading)
-        ;; process document attributes
-        (org-fm-insert-latex-header (org-fm-convert-keywords))
-        ;; process inline elements
-        (org-fm-replace-inline-elements-with-latex)
-        ;; process tagged items
-        (org-fm-replace-tags-with-latex)
-        ;; process untagged topics
-        (org-fm-replace-untagged-with-latex)
-        ;; dispatch export and go back to original buffer
-        (deactivate-mark)
-        (org-export-dispatch)
-        (switch-to-buffer buffer)
-        ))))
-
-(defun org-fm-add-or-update-timestamp ()
-  "Add or update timestamp in org-fm item at point."
-  (interactive)
-  (save-excursion
-    (beginning-of-line)
-    (if (org-at-item-p)
-        (if (looking-at (org-fm-make-regexp "\\([A-Z]+:\\)?"))
-            (if (match-beginning 5)     ; update timestamp
-                (progn (goto-char (match-beginning 5))
-                       (delete-region (match-beginning 5) (match-end 5))
-                       (org-insert-time-stamp (org-current-time) t t))
-              (if (match-beginning 4)   ; insert new timestamp after cat
-                  (progn (goto-char (match-end 4))
-                         (insert " ")
-                         (org-insert-time-stamp (org-current-time) t t))
-                (if (match-beginning 2) ; insert new timestamp after mark
-                    (progn (goto-char (match-end 2))
-                           (insert " ")
-                           (org-insert-time-stamp (org-current-time) t t)))))
-          (progn (org-beginning-of-line) ; insert new timestamp and separator
-                 (org-insert-time-stamp (org-current-time) t t)
-                 (insert " :: ")
-                 ))
-      (message "org-fm: no item at point!"))))
+;;====================
+;;
+;; Faces
+;;
+;;--------------------
 
 (defface org-fm-agenda-face
   '((t ( :box t
@@ -469,6 +515,13 @@ This function uses the regular `org-export-dispatcher'."
          :weight bold)))
   "Face for the comment type of minutes items.")
 
+
+;;====================
+;;
+;; Minor mode
+;;
+;;--------------------
+
 (define-minor-mode org-fm-minor-mode
   "Minor mode for org-fm. This minor mode makes available
 some useful faces for highlighting the type and assignment of
@@ -506,31 +559,6 @@ org-fm items."
   )
 
 ;; (add-hook 'org-mode-hook 'org-fm-minor-mode)
-
-(defun org-fm-clean-text ()
-  "Remove or replace symbols that may cause troubles during a LaTeX
-  export."
-  (interactive)
-  (save-excursion
-    (let ((count1 0)
-          (count2 0))
-      ;; Remove zero-width space
-      (goto-char (point-min))
-      (while (re-search-forward "​" nil t)
-        (replace-match "")
-        (setq count1 (1+ count1)))
-      ;; Replace quote symbols
-      (goto-char (point-min))
-      (while (re-search-forward "„\\|“\\|”" nil t)
-        (replace-match "\"")
-        (setq count2 (1+ count2)))
-      ;; Replace quote symbols
-      (goto-char (point-min))
-      (while (re-search-forward "’" nil t)
-        (replace-match "'")
-        (setq count2 (1+ count2)))
-      (message (format "org-fm-clean-text: removed %d chars, replaced %d chars" count1 count2))))
-  ) 
 
 
 (provide 'org-fm)
