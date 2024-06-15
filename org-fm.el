@@ -5,7 +5,7 @@
 ;; Author: Timm Lichte <timm.lichte@uni-tuebingen.de>
 ;; URL: https://github.com/timmli/org-fm-dev/blob/master/org-fm.el
 ;; Version: 0
-;; Last modified: 2024-06-15 Sat 22:19:17
+;; Last modified: 2024-06-15 Sat 22:24:05
 ;; Package-Requires: ((org-mode "9"))
 ;; Keywords: Org
 
@@ -168,7 +168,7 @@
   "Alist for mapping org-fm keywords to LaTeX commands.
 The order in ORG-FM-KEYWORDS-ALIST determines the order of the inserted LaTeX header.")
 
-(defun org-drawer-delete (name)
+(defun org-fm-delete-drawer (name)
   "Delete all drawers in buffer with title NAME.
 Inspired by: https://emacs.stackexchange.com/a/38367/12336"
   (interactive)
@@ -185,8 +185,8 @@ Inspired by: https://emacs.stackexchange.com/a/38367/12336"
 
 (defun org-fm-clean-heading ()
   "Clean up current heading."
-  (org-drawer-delete "LOGBOOK")         ; remove LOGBOOK
-  (org-drawer-delete "PROPERTIES")      ; remove PROPERTIES
+  (org-fm-delete-drawer "LOGBOOK")         ; remove LOGBOOK
+  (org-fm-delete-drawer "PROPERTIES")      ; remove PROPERTIES
   (org-deadline '(4))                   ; remove DEADLINE
   (org-schedule '(4))                   ; remove SCHEDULE
   ;; remove root heading
@@ -354,7 +354,7 @@ Inspired by: https://emacs.stackexchange.com/a/38367/12336"
        ;;                    keyword-latex)
        ;;     "\n")))
        ))
-    (org-drawer-delete "PARTICIPANTS-LIST")))
+    (org-fm-delete-drawer "PARTICIPANTS-LIST")))
 
 (defun org-fm-export ()
   "Export minutes in org-fm format.
