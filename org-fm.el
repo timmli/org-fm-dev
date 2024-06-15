@@ -5,7 +5,7 @@
 ;; Author: Timm Lichte <timm.lichte@uni-tuebingen.de>
 ;; URL: https://github.com/timmli/org-fm-dev/blob/master/org-fm.el
 ;; Version: 0
-;; Last modified: 2024-06-15 Sat 22:29:46
+;; Last modified: 2024-06-15 Sat 22:39:34
 ;; Package-Requires: ((org-mode "9"))
 ;; Keywords: Org
 
@@ -92,6 +92,61 @@
 
 ;;====================
 ;;
+;; Faces
+;;
+;;--------------------
+
+(defface org-fm-agenda-face
+  '((t ( :box t
+         :foreground "red"
+         :weight bold)))
+  "Face for the agenda type of minutes items.")
+
+(defface org-fm-cleared-agenda-face
+  '((t ( :inherit org-checkbox-done-text
+         :box t
+         :weight bold)))
+  "Face for the cleared type of minutes items.")
+
+(defface org-fm-decision-face
+  '((t ( :box t
+         :foreground "LimeGreen"
+         :weight bold)))
+  "Face for the decision type of minutes items.")
+
+(defface org-fm-information-face
+  '((t ( :box t
+         :foreground "CornflowerBlue"
+         :weight bold)))
+  "Face for the information type of minutes items.")
+
+(defface org-fm-note-face
+  '((t ( :box t
+         :foreground "orange"
+         :weight bold)))
+  "Face for the note type of minutes items.")
+
+(defface org-fm-question-face
+  '((t ( :box t
+         :foreground "orange"
+         :weight bold)))
+  "Face for the question type of minutes items.")
+
+(defface org-fm-alert-face
+  '((t ( :foreground "red"
+         :weight bold)))
+  "Face for the alert type of minutes items.")
+
+
+(defface org-fm-comment-face
+  '((t ( :inherit font-lock-comment-face
+         :box t
+         :weight bold)))
+  "Face for the comment type of minutes items.")
+
+
+;;====================
+;;
 ;; Manipulate items
 ;;
 ;;--------------------
@@ -144,6 +199,75 @@
         (replace-match "'")
         (setq count2 (1+ count2)))
       (message (format "org-fm-clean-text: removed %d chars, replaced %d chars" count1 count2))))) 
+
+
+;;====================
+;;
+;; Particiant list
+;;
+;;--------------------
+
+(defun org-fm-make-abbreviation-hash (partlist)
+  "Convert a list of of participants (strings) to a hash of abbreviations to names."
+  (let ((abrv-hash (make-hash-table :test 'equal)))
+    (dolist (participant partlist)
+      (when (string-match "^[[:blank:]]*\\[\\(?:X\\| \\)\\][[:blank:]]+\\(.*?\\)[[:blank:]]+\\[\\(.*?\\)\\(?:=\\(.*?\\)\\)?\\]" participant)
+        (let* ((fullname (string-trim (match-string 1 participant)))
+               (abbrev (string-trim (match-string 2 participant)))
+               (name
+                (or (match-string 3 participant)
+                    (if (or
+                         (string-match "^\\(.*?\\),[ ]+" fullname)
+                         (string-match "[ ]+\\(.*?\\)$" fullname))
+                        (match-string 1 fullname)))))
+          (if name                      ; `name' must be non-nil
+              (puthash abbrev name abrv-hash))
+          )))
+    abrv-hash))
+
+(defun org-fm-expand-abbreviations ()
+  "Fetch abbreviation hash from the PARTICIPANTS-LIST 
+and replace abbreviations with names in the subsequent org-fm items."
+  (save-excursion
+    (setq counter 0) 
+    (let ((abrv-hash
+           (if (re-search-forward ":PARTICIPANTS-LIST:" nil t)
+               (progn (forward-line 1)
+                      (beginning-of-line)
+                      (if (eq (car (org-element-at-point)) 'plain-list)
+                          (org-fm-make-abbreviation-hash 
+                           (mapcar 'car (cdr (org-list-to-lisp))))))))
+          (case-fold-search nil)) ; make re-search-forward case sensitive
+      (if (re-search-forward "^[[:blank:]]*[0-9]+)[[:blank:]]" nil t)
+          (dolist (key (hash-table-keys abrv-hash))
+            (save-excursion
+              (while (re-search-forward
+                      (concat "\\(" (word-search-regexp key) "\\)")
+                      nil t)
+                (if (not (looking-back (format org-fm-abbreviation-escape-symbol key))) ; escape abbreviation expansion 
+                    (replace-match (gethash key abrv-hash) t))
+                (setq counter (+ counter 1))))))
+      (message "org-fm: %d abbreviation(s) replaced." counter))))
+
+(defun org-fm-remove-abbreviations-from-partlist ()
+  "Remove the first pair of square brackets of a participant."
+  (save-excursion
+    (if (re-search-forward ":PARTICIPANTS-LIST:" nil t)
+        (progn
+          (forward-line 1)
+          (beginning-of-line)
+          (org-narrow-to-element)
+          (while (re-search-forward "^[[:blank:]]*-[[:blank:]]+\\[.\\][[:blank:]]+.*?\\[.*?\\]" nil t)
+            (looking-back "\\[.*?\\]")
+            (replace-match ""))
+          (org-toggle-narrow-to-subtree)))))
+
+(defun org-fm-remove-abbreviation-escape ()
+  "Remove the symbol for escaping abbreviation expansion in org-fm items."
+  (save-excursion
+    (if (re-search-forward "^[[:blank:]]*[0-9]+)[[:blank:]]" nil t)
+        (while (search-forward (format org-fm-abbreviation-escape-symbol "") nil t)
+          (replace-match "")))))
 
 
 ;;====================
@@ -392,128 +516,6 @@ This function uses the regular `org-export-dispatcher'."
         (org-export-dispatch)
         (switch-to-buffer buffer)
         ))))
-
-;;====================
-;;
-;; Particiant list
-;;
-;;--------------------
-
-(defun org-fm-make-abbreviation-hash (partlist)
-  "Convert a list of of participants (strings) to a hash of abbreviations to names."
-  (let ((abrv-hash (make-hash-table :test 'equal)))
-    (dolist (participant partlist)
-      (when (string-match "^[[:blank:]]*\\[\\(?:X\\| \\)\\][[:blank:]]+\\(.*?\\)[[:blank:]]+\\[\\(.*?\\)\\(?:=\\(.*?\\)\\)?\\]" participant)
-        (let* ((fullname (string-trim (match-string 1 participant)))
-               (abbrev (string-trim (match-string 2 participant)))
-               (name
-                (or (match-string 3 participant)
-                    (if (or
-                         (string-match "^\\(.*?\\),[ ]+" fullname)
-                         (string-match "[ ]+\\(.*?\\)$" fullname))
-                        (match-string 1 fullname)))))
-          (if name                      ; `name' must be non-nil
-              (puthash abbrev name abrv-hash))
-          )))
-    abrv-hash))
-
-(defun org-fm-expand-abbreviations ()
-  "Fetch abbreviation hash from the PARTICIPANTS-LIST 
-and replace abbreviations with names in the subsequent org-fm items."
-  (save-excursion
-    (setq counter 0) 
-    (let ((abrv-hash
-           (if (re-search-forward ":PARTICIPANTS-LIST:" nil t)
-               (progn (forward-line 1)
-                      (beginning-of-line)
-                      (if (eq (car (org-element-at-point)) 'plain-list)
-                          (org-fm-make-abbreviation-hash 
-                           (mapcar 'car (cdr (org-list-to-lisp))))))))
-          (case-fold-search nil)) ; make re-search-forward case sensitive
-      (if (re-search-forward "^[[:blank:]]*[0-9]+)[[:blank:]]" nil t)
-          (dolist (key (hash-table-keys abrv-hash))
-            (save-excursion
-              (while (re-search-forward
-                      (concat "\\(" (word-search-regexp key) "\\)")
-                      nil t)
-                (if (not (looking-back (format org-fm-abbreviation-escape-symbol key))) ; escape abbreviation expansion 
-                    (replace-match (gethash key abrv-hash) t))
-                (setq counter (+ counter 1))))))
-      (message "org-fm: %d abbreviation(s) replaced." counter))))
-
-(defun org-fm-remove-abbreviations-from-partlist ()
-  "Remove the first pair of square brackets of a participant."
-  (save-excursion
-    (if (re-search-forward ":PARTICIPANTS-LIST:" nil t)
-        (progn
-          (forward-line 1)
-          (beginning-of-line)
-          (org-narrow-to-element)
-          (while (re-search-forward "^[[:blank:]]*-[[:blank:]]+\\[.\\][[:blank:]]+.*?\\[.*?\\]" nil t)
-            (looking-back "\\[.*?\\]")
-            (replace-match ""))
-          (org-toggle-narrow-to-subtree)))))
-
-(defun org-fm-remove-abbreviation-escape ()
-  "Remove the symbol for escaping abbreviation expansion in org-fm items."
-  (save-excursion
-    (if (re-search-forward "^[[:blank:]]*[0-9]+)[[:blank:]]" nil t)
-        (while (search-forward (format org-fm-abbreviation-escape-symbol "") nil t)
-          (replace-match "")))))
-
-;;====================
-;;
-;; Faces
-;;
-;;--------------------
-
-(defface org-fm-agenda-face
-  '((t ( :box t
-         :foreground "red"
-         :weight bold)))
-  "Face for the agenda type of minutes items.")
-
-(defface org-fm-cleared-agenda-face
-  '((t ( :inherit org-checkbox-done-text
-         :box t
-         :weight bold)))
-  "Face for the cleared type of minutes items.")
-
-(defface org-fm-decision-face
-  '((t ( :box t
-         :foreground "LimeGreen"
-         :weight bold)))
-  "Face for the decision type of minutes items.")
-
-(defface org-fm-information-face
-  '((t ( :box t
-         :foreground "CornflowerBlue"
-         :weight bold)))
-  "Face for the information type of minutes items.")
-
-(defface org-fm-note-face
-  '((t ( :box t
-         :foreground "orange"
-         :weight bold)))
-  "Face for the note type of minutes items.")
-
-(defface org-fm-question-face
-  '((t ( :box t
-         :foreground "orange"
-         :weight bold)))
-  "Face for the question type of minutes items.")
-
-(defface org-fm-alert-face
-  '((t ( :foreground "red"
-         :weight bold)))
-  "Face for the alert type of minutes items.")
-
-
-(defface org-fm-comment-face
-  '((t ( :inherit font-lock-comment-face
-         :box t
-         :weight bold)))
-  "Face for the comment type of minutes items.")
 
 
 ;;====================
