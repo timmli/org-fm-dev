@@ -5,7 +5,7 @@
 ;; Author: Timm Lichte <timm.lichte@uni-tuebingen.de>
 ;; URL: https://github.com/timmli/org-fm-dev/blob/master/org-fm.el
 ;; Version: 0
-;; Last modified: 2024-06-15 Sat 15:11:34
+;; Last modified: 2024-06-15 Sat 21:39:37
 ;; Package-Requires: ((org-mode "9"))
 ;; Keywords: Org
 
@@ -53,20 +53,33 @@
 
 (require 'org)
 
+;;====================
+;;
+;; General variables
+;;
+;;--------------------
+
 (defvar org-fm-question-regexp
-  "\\(\\?\\(:\\||\\)\\)\\(.*?\\)\\(\\(:\\||\\)\\?\\)")
+  "\\(\\?\\(:\\||\\)\\)\\(.*?\\)\\(\\(:\\||\\)\\?\\)"
+  "Regular expression for inline questions.
+  Example: ?:inline question:?")
 
 (defvar org-fm-alert-regexp
-  "\\(!\\(:\\||\\)\\)\\(.*?\\)\\(\\(:\\||\\)!\\)")
+  "\\(!\\(:\\||\\)\\)\\(.*?\\)\\(\\(:\\||\\)!\\)"
+  "Regular expression for inline alerts.
+  Example: !:inline alert:!")
 
 (defvar org-fm-comment-regexp
-  "\\(#\\(:\\||\\)\\)\\(.*?\\)\\(\\(:\\||\\)#\\)")
+  "\\(#\\(:\\||\\)\\)\\(.*?\\)\\(\\(:\\||\\)#\\)"
+  "Regular expression for inline comments.
+  Example: #:inline comment:#")
 
 (defvar org-fm-abbreviation-escape-symbol
-  "##%s")
+  "##%s"
+  "Format string for escaping abbreviations.")
 
 (defun org-fm-make-regexp (cat)
-  "Make regular expression for some category CAT of org-fm items."
+  "Make regular expression for org-fm items of some category CAT."
   (concat
    "^\\([[:blank:]]*\\)\\([0-9]+\)\\|-\\)"
    "[[:blank:]]+\\("
@@ -409,59 +422,51 @@ This function uses the regular `org-export-dispatcher'."
       (message "org-fm: no item at point!"))))
 
 (defface org-fm-agenda-face
-  '((t (
-        :box t
-        :foreground "red"
-        :weight bold)))
+  '((t ( :box t
+         :foreground "red"
+         :weight bold)))
   "Face for the agenda type of minutes items.")
 
 (defface org-fm-cleared-agenda-face
-  '((t (
-        :inherit org-checkbox-done-text
-        :box t
-        :weight bold)))
+  '((t ( :inherit org-checkbox-done-text
+         :box t
+         :weight bold)))
   "Face for the cleared type of minutes items.")
 
 (defface org-fm-decision-face
-  '((t (
-        :box t
-        :foreground "LimeGreen"
-        :weight bold)))
+  '((t ( :box t
+         :foreground "LimeGreen"
+         :weight bold)))
   "Face for the decision type of minutes items.")
 
 (defface org-fm-information-face
-  '((t (
-        :box t
-        :foreground "CornflowerBlue"
-        :weight bold)))
+  '((t ( :box t
+         :foreground "CornflowerBlue"
+         :weight bold)))
   "Face for the information type of minutes items.")
 
 (defface org-fm-note-face
-  '((t (
-        :box t
-        :foreground "orange"
-        :weight bold)))
+  '((t ( :box t
+         :foreground "orange"
+         :weight bold)))
   "Face for the note type of minutes items.")
 
 (defface org-fm-question-face
-  '((t (
-        :box t
-        :foreground "orange"
-        :weight bold)))
+  '((t ( :box t
+         :foreground "orange"
+         :weight bold)))
   "Face for the question type of minutes items.")
 
 (defface org-fm-alert-face
-  '((t (
-        :foreground "red"
-        :weight bold)))
+  '((t ( :foreground "red"
+         :weight bold)))
   "Face for the alert type of minutes items.")
 
 
 (defface org-fm-comment-face
-  '((t (
-        :inherit font-lock-comment-face
-        :box t
-        :weight bold)))
+  '((t ( :inherit font-lock-comment-face
+         :box t
+         :weight bold)))
   "Face for the comment type of minutes items.")
 
 (define-minor-mode org-fm-minor-mode
@@ -503,7 +508,8 @@ org-fm items."
 ;; (add-hook 'org-mode-hook 'org-fm-minor-mode)
 
 (defun org-fm-clean-text ()
-  "Remove or replace symbols that cause troubles during a LaTeX export."
+  "Remove or replace symbols that may cause troubles during a LaTeX
+  export."
   (interactive)
   (save-excursion
     (let ((count1 0)
