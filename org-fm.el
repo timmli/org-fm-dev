@@ -5,7 +5,7 @@
 ;; Author: Timm Lichte <timm.lichte@uni-tuebingen.de>
 ;; URL: https://github.com/timmli/org-fm-dev/blob/master/org-fm.el
 ;; Version: 0
-;; Last modified: 2024-06-15 Sat 22:24:05
+;; Last modified: 2024-06-15 Sat 22:26:54
 ;; Package-Requires: ((org-mode "9"))
 ;; Keywords: Org
 
@@ -291,7 +291,7 @@ Inspired by: https://emacs.stackexchange.com/a/38367/12336"
     (while (re-search-forward "^[0-9]+\) " nil t)
       (replace-match "* "))))
 
-(defun org-fm-convert-keywords ()
+(defun org-fm-convert-keywords-to-latex ()
   "Collect all #+MINUTES keywords and convert them to LaTeX commands."
   (save-excursion
     (let ((keyword-alist-input org-fm-keywords-latex-alist)
@@ -380,7 +380,7 @@ This function uses the regular `org-export-dispatcher'."
         ;; clean up root heading
         (org-fm-clean-heading)
         ;; process document attributes
-        (org-fm-insert-latex-header (org-fm-convert-keywords))
+        (org-fm-insert-latex-header (org-fm-convert-keywords-to-latex))
         ;; process inline elements
         (org-fm-replace-inline-elements-with-latex)
         ;; process tagged items
