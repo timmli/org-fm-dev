@@ -5,7 +5,7 @@
 ;; Author: Timm Lichte <timm.lichte@uni-tuebingen.de>
 ;; URL: https://github.com/timmli/org-fm-dev/blob/master/org-fm.el
 ;; Version: 0
-;; Last modified: 2024-06-15 Sat 22:26:54
+;; Last modified: 2024-06-15 Sat 22:29:46
 ;; Package-Requires: ((org-mode "9"))
 ;; Keywords: Org
 
@@ -46,7 +46,7 @@
 ;;    - N: This is a note outside the protocol.
 
 ;;; Usage:
-;; Run `org-fm-export' to export a heading that contains the minutes.
+;; Run `org-fm-export-to-latex' to export a heading that contains the minutes.
 ;; Appropriate faces can be activated with `org-fm-minor-mode'.
 
 ;;; Code:
@@ -356,8 +356,8 @@ Inspired by: https://emacs.stackexchange.com/a/38367/12336"
        ))
     (org-fm-delete-drawer "PARTICIPANTS-LIST")))
 
-(defun org-fm-export ()
-  "Export minutes in org-fm format.
+(defun org-fm-export-to-latex ()
+  "Export minutes in org-fm format to LaTeX.
 This function uses the regular `org-export-dispatcher'."
   (interactive)
   (save-excursion
