@@ -5,7 +5,7 @@
 ;; Author: Timm Lichte <timm.lichte@uni-tuebingen.de>
 ;; URL: https://github.com/timmli/org-fm-dev/blob/master/org-fm.el
 ;; Version: 0
-;; Last modified: 2024-06-15 Sat 22:39:34
+;; Last modified: 2024-06-16 Sun 20:21:35
 ;; Package-Requires: ((org-mode "9"))
 ;; Keywords: Org
 
@@ -272,6 +272,112 @@ and replace abbreviations with names in the subsequent org-fm items."
 
 ;;====================
 ;;
+;; Export to HTML
+;;
+;;--------------------
+
+;; It is notoriously unclear how to export lists with description items
+;; (marked with "::"). The following tries to export them as regular
+;; lists.
+
+;; TODO: Use XML-DOM
+;; (let* ((xml-dom-tree (with-temp-buffer
+;;                        (insert data)
+;;                        (libxml-parse-xml-region (point-min) (point-max)))))
+;;   ...
+
+(defun org-fm-html-description-list-to-regular-list (data)
+  "Convert HTML description list in string DATA to regular list."
+  (replace-regexp-in-string
+   "<dt>\\([^<]+\\)</dt>[[:space:]]*<dd>\\([^<]+\\)"
+   "<li>\\1 :: \\2"
+	 (replace-regexp-in-string
+		"</dd>"
+		"</li>"
+		(replace-regexp-in-string
+     "<dl.*?>"
+		 "<ul class=\"org-ul\">"
+		 (replace-regexp-in-string
+			"</dl>"
+			"</ul>" 
+			(replace-regexp-in-string
+			 "<li id=\"\\(.*?\\)\">"
+			 "<li>\\1 :: "
+			 data))))))
+
+(defun org-fm-html-participant-list (data)
+  "Tweak participation/checkbox list in string DATA."
+  (replace-regexp-in-string
+   "<li.*?>\\(☐\\|☒\\)"
+   "<li style=\"list-style-type:none\">\\1"
+   (replace-regexp-in-string
+    "<code>\\[&#xa0;\\]</code>"
+    "☐"
+    (replace-regexp-in-string
+     "<code>\\[X\\]</code>"
+     "☒"
+     data))))
+
+(defun org-fm-html-colorize-list (data)
+  "Colorize HTML list in string DATA."
+  (replace-regexp-in-string
+   "<li>[[:space:]]*\\(\\(\\(.\\): \\)?.*::\\)\\( .*\\)"
+   (lambda (match)
+     (let ((matched-category (match-string 3 match)))
+       (concat "<li>"
+               (cond ((string= "A" matched-category)
+                      (concat "<div style=\"color:red;font-weight:bold\">"
+                              "\\1</div>"))
+                     ((or (string= "D" matched-category)
+                          (string= "E" matched-category))
+                      (concat "<div style=\"color:green;font-weight:bold\">"
+                              "\\1</div>"))
+                     ((string= "AC" matched-category)
+                      (concat "<div style=\"color:green;font-weight:bold\">"
+                              "\\1</div>"))
+                     ((string= "N" matched-category)
+                      (concat "<div style=\"color:orange;font-weight:bold\">"
+                              "\\1</div>"))
+                     (t (concat "<div style=\"color:blue\">"
+                                "\\1</div>")))
+               "\\4")))
+   data))
+
+;; (defun org-fm-html-colorize-list (data)
+;;   "Colorize HTML list in string DATA."
+;;   (let ((start 0)
+;;         (result data))
+;;     (save-match-data
+;;       (while (string-match "<li>\\([[:space:]]*\\(A\\|D\\|E\\|AC\\|I\\|N\\): .*:: .*\\)" result start)
+;;         (setq result (replace-match
+;;                       (concat "<li style=\"color: "
+;;                               (cond ((string= "A" (match-string 2 result)) "red")
+;;                                     ((or (string= "D" (match-string 2 result))
+;;                                          (string= "E" (match-string 2 result)))
+;;                                      "green")
+;;                                     ((string= "AC" (match-string 2 result)) "green")
+;;                                     ((string= "N" (match-string 2 result)) "orange")
+;;                                     (t "blue"))
+;;                               "\">"
+;;                               "\\1")
+;;                       t nil result))
+;;         (setq start (match-end 0))))
+;;     result))
+
+(defun org-fm-export-description-list-to-html (data backend info)
+  "Convert description lists to regular list items during HTML export."
+  (when (org-export-derived-backend-p backend 'html)
+    (org-fm-html-participant-list
+     (org-fm-html-colorize-list
+      (org-fm-html-description-list-to-regular-list data)))))
+
+;; Usage:
+;; (add-to-list 'org-export-filter-plain-list-functions
+;;              'org-fm-export-description-list-to-html)
+
+
+;;====================
+;;
 ;; Export to LaTeX
 ;;
 ;;--------------------
@@ -528,8 +634,9 @@ This function uses the regular `org-export-dispatcher'."
   "Minor mode for org-fm. This minor mode makes available
 some useful faces for highlighting the type and assignment of
 org-fm items."
-  :lighter " om"
+  :lighter " fm"
 
+  ;; Appearence
   (font-lock-add-keywords
    'org-mode
    `((,org-fm-question-regexp
@@ -557,6 +664,10 @@ org-fm items."
      (,(org-fm-make-regexp "N:")
       (3 '(org-fm-note-face) prepend)))
    'append)
+
+  ;; Export to HTML
+  ;; (add-to-list 'org-export-filter-plain-list-functions
+  ;;              'org-fm-export-description-list-to-html)
 
   )
 
