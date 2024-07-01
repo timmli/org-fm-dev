@@ -5,7 +5,7 @@
 ;; Author: Timm Lichte <timm.lichte@uni-tuebingen.de>
 ;; URL: https://github.com/timmli/org-fm-dev/blob/master/org-fm.el
 ;; Version: 0
-;; Last modified: 2024-06-16 Sun 20:21:35
+;; Last modified: 2024-07-01 Mon 19:13:56
 ;; Package-Requires: ((org-mode "9"))
 ;; Keywords: Org
 
@@ -327,20 +327,19 @@ and replace abbreviations with names in the subsequent org-fm items."
        (concat "<li>"
                (cond ((string= "A" matched-category)
                       (concat "<div style=\"color:red;font-weight:bold\">"
-                              "\\1</div>"))
+                              "\\1\\4</div>"))
                      ((or (string= "D" matched-category)
                           (string= "E" matched-category))
                       (concat "<div style=\"color:green;font-weight:bold\">"
-                              "\\1</div>"))
+                              "\\1</div>\\4"))
                      ((string= "AC" matched-category)
                       (concat "<div style=\"color:green;font-weight:bold\">"
-                              "\\1</div>"))
+                              "\\1</div>\\4"))
                      ((string= "N" matched-category)
                       (concat "<div style=\"color:orange;font-weight:bold\">"
-                              "\\1</div>"))
+                              "\\1</div>\\4"))
                      (t (concat "<div style=\"color:blue\">"
-                                "\\1</div>")))
-               "\\4")))
+                                "\\1</div>\\4"))))))
    data))
 
 ;; (defun org-fm-html-colorize-list (data)
