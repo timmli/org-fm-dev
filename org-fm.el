@@ -5,7 +5,7 @@
 ;; Author: Timm Lichte <timm.lichte@uni-tuebingen.de>
 ;; URL: https://github.com/timmli/org-fm-dev/blob/master/org-fm.el
 ;; Version: 0
-;; Last modified: 2024-07-08 Mon 17:38:39
+;; Last modified: 2024-07-08 Mon 17:42:16
 ;; Package-Requires: ((org-mode "9"))
 ;; Keywords: Org
 
@@ -291,19 +291,19 @@ and replace abbreviations with names in the subsequent org-fm items."
   (replace-regexp-in-string
    "<dt>\\([^<]+\\)</dt>[[:space:]]*<dd>\\([^<]+\\)"
    "<li>\\1 :: \\2"
-	 (replace-regexp-in-string
-		"</dd>"
-		"</li>"
-		(replace-regexp-in-string
+   (replace-regexp-in-string
+    "</dd>"
+    "</li>"
+    (replace-regexp-in-string
      "<dl.*?>"
-		 "<ul class=\"org-ul\">"
-		 (replace-regexp-in-string
-			"</dl>"
-			"</ul>" 
-			(replace-regexp-in-string
-			 "<li id=\"\\(.*?\\)\">"
-			 "<li>\\1 :: "
-			 data))))))
+     "<ul class=\"org-ul\">"
+     (replace-regexp-in-string
+      "</dl>"
+      "</ul>" 
+      (replace-regexp-in-string
+       "<li id=\"\\(.*?\\)\">"
+       "<li>\\1 :: "
+       data))))))
 
 (defun org-fm-html-participant-list (data)
   "Tweak participation/checkbox list in string DATA."
@@ -334,27 +334,27 @@ and replace abbreviations with names in the subsequent org-fm items."
   "Adjust style of the first HTML list in DATA using a DOM generated
   with libxml."
   (if (libxml-available-p)
-	    (let* ((html-dom-tree (with-temp-buffer
-													    (insert data)
-													    (libxml-parse-html-region (point-min) (point-max))))
-				     (body-first-child (car (dom-children (car (dom-by-tag html-dom-tree 'body))))))
+      (let* ((html-dom-tree (with-temp-buffer
+                              (insert data)
+                              (libxml-parse-html-region (point-min) (point-max))))
+             (body-first-child (car (dom-children (car (dom-by-tag html-dom-tree 'body))))))
 
         ;; Participants: When ul, for each li with a box, append the text of the children in grey.
-	      (when (eq (dom-tag body-first-child) 'ul)
-		      (cl-loop
-		       for node in (dom-children body-first-child)
-		       when (eq (dom-tag (list node)) 'li) ; without (list node): Wrong type argument: listp, ""
-		       do (cl-loop
-				       for node-child in (dom-children node)
+        (when (eq (dom-tag body-first-child) 'ul)
+          (cl-loop
+           for node in (dom-children body-first-child)
+           when (eq (dom-tag (list node)) 'li) ; without (list node): Wrong type argument: listp, ""
+           do (cl-loop
+               for node-child in (dom-children node)
                ;; Trim string child 
-				       when (stringp node-child)
-				       do (progn (dom-add-child-before node
+               when (stringp node-child)
+               do (progn (dom-add-child-before node
                                                (concat (string-trim node-child) " ")
                                                node-child)
-									       (dom-remove-node html-dom-tree node-child))
+                         (dom-remove-node html-dom-tree node-child))
                ;; Extract text from ul children
-				       when (eq (dom-tag (list node-child)) 'ul)
-				       do (progn
+               when (eq (dom-tag (list node-child)) 'ul)
+               do (progn
 							      (dom-append-child node
 																      (concat "<span style=\"color:grey\">"
 																				      "("
