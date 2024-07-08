@@ -5,7 +5,7 @@
 ;; Author: Timm Lichte <timm.lichte@uni-tuebingen.de>
 ;; URL: https://github.com/timmli/org-fm-dev/blob/master/org-fm.el
 ;; Version: 0
-;; Last modified: 2024-07-08 Mon 17:45:59
+;; Last modified: 2024-07-08 Mon 17:47:06
 ;; Package-Requires: ((org-mode "9"))
 ;; Keywords: Org
 
@@ -415,7 +415,7 @@ and replace abbreviations with names in the subsequent org-fm items."
                                            "\">"
                                            (string-trim node-child) "</span>")
                                           node-child)
-					          (dom-remove-node html-dom-tree node-child)))))
+                    (dom-remove-node html-dom-tree node-child)))))
 
         (with-temp-buffer
 		      (dom-print html-dom-tree)
