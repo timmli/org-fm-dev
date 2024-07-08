@@ -5,7 +5,7 @@
 ;; Author: Timm Lichte <timm.lichte@uni-tuebingen.de>
 ;; URL: https://github.com/timmli/org-fm-dev/blob/master/org-fm.el
 ;; Version: 0
-;; Last modified: 2024-07-08 Mon 14:09:45
+;; Last modified: 2024-07-08 Mon 17:38:39
 ;; Package-Requires: ((org-mode "9"))
 ;; Keywords: Org
 
@@ -318,37 +318,13 @@ and replace abbreviations with names in the subsequent org-fm items."
      "☒"
      data))))
 
-(defun org-fm-html-colorize-list (data)
-  "Colorize HTML list in string DATA."
-  (replace-regexp-in-string
-   "<li>[[:space:]]*\\(\\(\\(.\\): \\)?.*::\\)\\( .*\\)"
-   (lambda (match)
-     (let ((matched-category (match-string 3 match)))
-       (concat "<li>"
-               (cond ((string= "A" matched-category)
-                      (concat "<div style=\"color:red;font-weight:bold\">"
-                              "\\1\\4</div>"))
-                     ((or (string= "D" matched-category)
-                          (string= "E" matched-category))
-                      (concat "<div style=\"color:green;font-weight:bold\">"
-                              "\\1</div>\\4"))
-                     ((string= "AC" matched-category)
-                      (concat "<div style=\"color:green;font-weight:bold\">"
-                              "\\1</div>\\4"))
-                     ((string= "N" matched-category)
-                      (concat "<div style=\"color:orange;font-weight:bold\">"
-                              "\\1</div>\\4"))
-                     (t (concat "<div style=\"color:blue\">"
-                                "\\1</div>\\4"))))))
-   data))
-
 (defun org-fm-export-list-item-to-html (data backend info)
   "Process list item in DATA during HTML export. Note that this
   function is applied to each list item, not to the list as a whole."
   (when (org-export-derived-backend-p backend 'html)
     (org-fm-html-participant-list
-     (org-fm-html-colorize-list
-      (org-fm-html-description-list-to-regular-list data)))))
+     (org-fm-html-description-list-to-regular-list data)
+     )))
 
 ;; Usage:
 ;; (add-to-list 'org-export-filter-plain-list-functions
@@ -370,11 +346,13 @@ and replace abbreviations with names in the subsequent org-fm items."
 		       when (eq (dom-tag (list node)) 'li) ; without (list node): Wrong type argument: listp, ""
 		       do (cl-loop
 				       for node-child in (dom-children node)
+               ;; Trim string child 
 				       when (stringp node-child)
 				       do (progn (dom-add-child-before node
                                                (concat (string-trim node-child) " ")
                                                node-child)
 									       (dom-remove-node html-dom-tree node-child))
+               ;; Extract text from ul children
 				       when (eq (dom-tag (list node-child)) 'ul)
 				       do (progn
 							      (dom-append-child node
@@ -382,8 +360,43 @@ and replace abbreviations with names in the subsequent org-fm items."
 																				      "("
 																				      (string-trim (dom-texts node-child))
 																				      ")</span>"))
-							      (dom-remove-node html-dom-tree node-child)))))
+							      (dom-remove-node html-dom-tree node-child)))
+           ;; Replace li with div
+           when (eq (dom-tag (list node)) 'li)
+           do (progn (dom-add-child-before (dom-parent html-dom-tree node)
+                                           (concat "<div>" (dom-text node) "</div>")
+                                           node)
+									   (dom-remove-node html-dom-tree node))))
 
+        ;; Colorize items
+        (cl-loop
+			   for node in (dom-by-tag html-dom-tree 'li)
+         for text-child = (nth 2 node)
+         when (string-match "^[[:space:]]*\\(\\(\\(..?\\): \\)?.*::\\)\\( .*\\)" text-child)
+         do (let* ((type (match-string 3 text-child))
+                   (header (match-string 1 text-child))
+                   (body (match-string 4 text-child))
+                   (new-node (cond ((string= "A" type)
+                                    (concat "<span style=\"color:red;font-weight:bold\">"
+                                            header body "</span>"))
+                                   ((or (string= "D" type)
+                                        (string= "E" type))
+                                    (concat "<span style=\"color:green;font-weight:bold\">"
+                                            header body "</span>"))
+                                   ((string= "AC" type)
+                                    (concat "<span style=\"color:green;font-weight:bold\">"
+                                            header "</span>" body))
+                                   ((string= "N" type)
+                                    (concat "<span style=\"color:orange;font-weight:bold\">"
+                                            header "</span>" body))
+                                   (t (concat "<span style=\"color:blue\">"
+                                              header "</span>" body))
+                                   )))
+              (dom-add-child-before node
+                                    new-node
+                                    text-child)
+              (dom-remove-node html-dom-tree text-child)))
+        
 		    ;; Topics: When ol, highlight all li children
 		    (when (eq (dom-tag body-first-child) 'ol)
 			    (cl-loop
@@ -395,9 +408,10 @@ and replace abbreviations with names in the subsequent org-fm items."
                do (progn
                     (dom-add-child-before node
                                           (concat
-                                           "<span style=\"" (concat "font-weight:bold;"
-									                                                  "background-color:lightgrey;"
-									                                                  "text-decoration-line:underline;")
+                                           "<span style=\""
+                                           "font-weight:bold;"
+									                         "background-color:rgb(192, 192, 192);"
+									                         "text-decoration-line:underline;"
                                            "\">"
                                            (string-trim node-child) "</span>")
                                           node-child)
