@@ -5,7 +5,7 @@
 ;; Author: Timm Lichte <timm.lichte@uni-tuebingen.de>
 ;; URL: https://github.com/timmli/org-fm-dev/blob/master/org-fm.el
 ;; Version: 0
-;; Last modified: 2024-07-08 Mon 17:44:15
+;; Last modified: 2024-07-08 Mon 17:45:59
 ;; Package-Requires: ((org-mode "9"))
 ;; Keywords: Org
 
@@ -411,7 +411,7 @@ and replace abbreviations with names in the subsequent org-fm items."
                                            "<span style=\""
                                            "font-weight:bold;"
                                            "background-color:rgb(192, 192, 192);"
-									                         "text-decoration-line:underline;"
+                                           "text-decoration-line:underline;"
                                            "\">"
                                            (string-trim node-child) "</span>")
                                           node-child)
