@@ -5,7 +5,7 @@
 ;; Author: Timm Lichte <timm.lichte@uni-tuebingen.de>
 ;; URL: https://github.com/timmli/org-fm-dev/blob/master/org-fm.el
 ;; Version: 0
-;; Last modified: 2024-07-08 Mon 17:42:16
+;; Last modified: 2024-07-08 Mon 17:44:15
 ;; Package-Requires: ((org-mode "9"))
 ;; Keywords: Org
 
@@ -355,22 +355,22 @@ and replace abbreviations with names in the subsequent org-fm items."
                ;; Extract text from ul children
                when (eq (dom-tag (list node-child)) 'ul)
                do (progn
-							      (dom-append-child node
-																      (concat "<span style=\"color:grey\">"
-																				      "("
-																				      (string-trim (dom-texts node-child))
-																				      ")</span>"))
-							      (dom-remove-node html-dom-tree node-child)))
+                    (dom-append-child node
+                                      (concat "<span style=\"color:grey\">"
+                                              "("
+                                              (string-trim (dom-texts node-child))
+                                              ")</span>"))
+                    (dom-remove-node html-dom-tree node-child)))
            ;; Replace li with div
            when (eq (dom-tag (list node)) 'li)
            do (progn (dom-add-child-before (dom-parent html-dom-tree node)
                                            (concat "<div>" (dom-text node) "</div>")
                                            node)
-									   (dom-remove-node html-dom-tree node))))
+                     (dom-remove-node html-dom-tree node))))
 
         ;; Colorize items
         (cl-loop
-			   for node in (dom-by-tag html-dom-tree 'li)
+         for node in (dom-by-tag html-dom-tree 'li)
          for text-child = (nth 2 node)
          when (string-match "^[[:space:]]*\\(\\(\\(..?\\): \\)?.*::\\)\\( .*\\)" text-child)
          do (let* ((type (match-string 3 text-child))
@@ -397,20 +397,20 @@ and replace abbreviations with names in the subsequent org-fm items."
                                     text-child)
               (dom-remove-node html-dom-tree text-child)))
         
-		    ;; Topics: When ol, highlight all li children
-		    (when (eq (dom-tag body-first-child) 'ol)
-			    (cl-loop
-			     for node in (dom-children body-first-child)
-			     when (eq (dom-tag (list node)) 'li) ; without (list node): Wrong type argument: listp, ""  
-			     do (cl-loop
-					     for node-child in (dom-children node)
+        ;; Topics: When ol, highlight all li children
+        (when (eq (dom-tag body-first-child) 'ol)
+          (cl-loop
+           for node in (dom-children body-first-child)
+           when (eq (dom-tag (list node)) 'li) ; without (list node): Wrong type argument: listp, ""  
+           do (cl-loop
+               for node-child in (dom-children node)
                when (stringp node-child)
                do (progn
                     (dom-add-child-before node
                                           (concat
                                            "<span style=\""
                                            "font-weight:bold;"
-									                         "background-color:rgb(192, 192, 192);"
+                                           "background-color:rgb(192, 192, 192);"
 									                         "text-decoration-line:underline;"
                                            "\">"
                                            (string-trim node-child) "</span>")
