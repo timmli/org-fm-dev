@@ -5,7 +5,7 @@
 ;; Author: Timm Lichte <timm.lichte@uni-tuebingen.de>
 ;; URL: https://github.com/timmli/org-fm-dev/blob/master/org-fm.el
 ;; Version: 0
-;; Last modified: 2024-07-01 Mon 19:13:56
+;; Last modified: 2024-07-08 Mon 14:07:17
 ;; Package-Requires: ((org-mode "9"))
 ;; Keywords: Org
 
@@ -363,8 +363,9 @@ and replace abbreviations with names in the subsequent org-fm items."
 ;;         (setq start (match-end 0))))
 ;;     result))
 
-(defun org-fm-export-description-list-to-html (data backend info)
-  "Convert description lists to regular list items during HTML export."
+(defun org-fm-export-list-item-to-html (data backend info)
+  "Process list item in DATA during HTML export. Note that this
+  function is applied to each list item, not to the list as a whole."
   (when (org-export-derived-backend-p backend 'html)
     (org-fm-html-participant-list
      (org-fm-html-colorize-list
@@ -372,8 +373,72 @@ and replace abbreviations with names in the subsequent org-fm items."
 
 ;; Usage:
 ;; (add-to-list 'org-export-filter-plain-list-functions
-;;              'org-fm-export-description-list-to-html)
+;;              'org-fm-export-list-item-to-html)
 
+(defun org-fm-html-adjust-style (data)
+  "Adjust style of the first HTML list in DATA using a DOM generated
+  with libxml."
+  (if (libxml-available-p)
+	    (let* ((html-dom-tree (with-temp-buffer
+													    (insert data)
+													    (libxml-parse-html-region (point-min) (point-max))))
+				     (body-first-child (car (dom-children (car (dom-by-tag html-dom-tree 'body))))))
+
+        ;; Participants: When ul, for each li with a box, append the text of the children in grey.
+	      (when (eq (dom-tag body-first-child) 'ul)
+		      (cl-loop
+		       for node in (dom-children body-first-child)
+		       when (eq (dom-tag (list node)) 'li) ; without (list node): Wrong type argument: listp, ""
+		       do (cl-loop
+				       for node-child in (dom-children node)
+				       when (stringp node-child)
+				       do (progn (dom-add-child-before node
+                                               (concat (string-trim node-child) " ")
+                                               node-child)
+									       (dom-remove-node html-dom-tree node-child))
+				       when (eq (dom-tag (list node-child)) 'ul)
+				       do (progn
+							      (dom-append-child node
+																      (concat "<span style=\"color:grey\">"
+																				      "("
+																				      (string-trim (dom-texts node-child))
+																				      ")</span>"))
+							      (dom-remove-node html-dom-tree node-child)))))
+
+		    ;; Topics: When ol, highlight all li children
+		    (when (eq (dom-tag body-first-child) 'ol)
+			    (cl-loop
+			     for node in (dom-children body-first-child)
+			     when (eq (dom-tag (list node)) 'li) ; without (list node): Wrong type argument: listp, ""  
+			     do (cl-loop
+					     for node-child in (dom-children node)
+               when (stringp node-child)
+               do (progn
+                    (dom-add-child-before node
+                                          (concat
+                                           "<span style=\"" (concat "font-weight:bold;"
+									                                                  "background-color:lightgrey;"
+									                                                  "text-decoration-line:underline;")
+                                           "\">"
+                                           (string-trim node-child) "</span>")
+                                          node-child)
+					          (dom-remove-node html-dom-tree node-child)))))
+
+        (with-temp-buffer
+		      (dom-print html-dom-tree)
+		      (buffer-string)))
+    (progn
+      (message "Could not find libxml, skipping org-fm-html-adjust-style.")
+      data)
+    ))
+
+(defun org-fm-export-whole-list-to-html (data backend info)
+  (when (org-export-derived-backend-p backend 'html)
+    (org-fm-html-adjust-style data)))
+
+;; Usage:
+;; (add-to-list 'org-export-filter-final-output-functions
+;;              'org-fm-export-whole-list-to-html)
 
 ;;====================
 ;;
@@ -666,7 +731,7 @@ org-fm items."
 
   ;; Export to HTML
   ;; (add-to-list 'org-export-filter-plain-list-functions
-  ;;              'org-fm-export-description-list-to-html)
+  ;;              'org-fm-export-list-item-to-html)
 
   )
 
