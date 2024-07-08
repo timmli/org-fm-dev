@@ -5,7 +5,7 @@
 ;; Author: Timm Lichte <timm.lichte@uni-tuebingen.de>
 ;; URL: https://github.com/timmli/org-fm-dev/blob/master/org-fm.el
 ;; Version: 0
-;; Last modified: 2024-07-08 Mon 14:07:17
+;; Last modified: 2024-07-08 Mon 14:09:45
 ;; Package-Requires: ((org-mode "9"))
 ;; Keywords: Org
 
@@ -341,27 +341,6 @@ and replace abbreviations with names in the subsequent org-fm items."
                      (t (concat "<div style=\"color:blue\">"
                                 "\\1</div>\\4"))))))
    data))
-
-;; (defun org-fm-html-colorize-list (data)
-;;   "Colorize HTML list in string DATA."
-;;   (let ((start 0)
-;;         (result data))
-;;     (save-match-data
-;;       (while (string-match "<li>\\([[:space:]]*\\(A\\|D\\|E\\|AC\\|I\\|N\\): .*:: .*\\)" result start)
-;;         (setq result (replace-match
-;;                       (concat "<li style=\"color: "
-;;                               (cond ((string= "A" (match-string 2 result)) "red")
-;;                                     ((or (string= "D" (match-string 2 result))
-;;                                          (string= "E" (match-string 2 result)))
-;;                                      "green")
-;;                                     ((string= "AC" (match-string 2 result)) "green")
-;;                                     ((string= "N" (match-string 2 result)) "orange")
-;;                                     (t "blue"))
-;;                               "\">"
-;;                               "\\1")
-;;                       t nil result))
-;;         (setq start (match-end 0))))
-;;     result))
 
 (defun org-fm-export-list-item-to-html (data backend info)
   "Process list item in DATA during HTML export. Note that this
