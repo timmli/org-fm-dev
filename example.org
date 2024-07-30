@@ -30,8 +30,11 @@
        - AC: Alexandra :: Cleared item
        - [X] :: Another cleared item 
        - C: :: Consultation ?:Open question regarding minutes:?
+             - Q: :: There also an item type for open questions regarding minutes.  
              - SP :: Sue's idea
              - KM :: Kim's question
        - N: [2020-06-03 Mi 10:39] :: This is a note. Outside the protocol or added later (with timestamp).
        - The expansion of abbreviations can be escaped with #@@latex:{}@@#: ##JD
-       - Inline comments can be included like this: #:This is an inline comment.:#  
+       - Inline comments can be included like this: #:This is an inline comment.:#
+       - Example for an !:inline alert:!
+

@@ -719,15 +719,14 @@ org-fm items."
      (,(org-fm-make-regexp "E:")
       (3 '(org-fm-decision-face) prepend))
      (,(org-fm-make-regexp "N:")
-      (3 '(org-fm-note-face) prepend)))
+      (3 '(org-fm-note-face) prepend))
+     (,(org-fm-make-regexp "Q:")
+      (3 '(org-fm-question-face) prepend)))
    'append)
-
-  ;; Export to HTML
-  ;; (add-to-list 'org-export-filter-plain-list-functions
-  ;;              'org-fm-export-list-item-to-html)
 
   )
 
+;; Usage:
 ;; (add-hook 'org-mode-hook 'org-fm-minor-mode)
 
 
