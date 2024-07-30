@@ -5,7 +5,7 @@
 ;; Author: Timm Lichte <timm.lichte@uni-tuebingen.de>
 ;; URL: https://github.com/timmli/org-fm-dev/blob/master/org-fm.el
 ;; Version: 0
-;; Last modified: 2024-07-08 Mon 17:47:06
+;; Last modified: 2024-07-30 Tue 15:52:36
 ;; Package-Requires: ((org-mode "9"))
 ;; Keywords: Org
 
@@ -59,17 +59,17 @@
 ;;
 ;;--------------------
 
-(defvar org-fm-question-regexp
+(defvar org-fm-inline-question-regexp
   "\\(\\?\\(:\\||\\)\\)\\(.*?\\)\\(\\(:\\||\\)\\?\\)"
   "Regular expression for inline questions.
   Example: ?:inline question:?")
 
-(defvar org-fm-alert-regexp
+(defvar org-fm-inline-alert-regexp
   "\\(!\\(:\\||\\)\\)\\(.*?\\)\\(\\(:\\||\\)!\\)"
   "Regular expression for inline alerts.
   Example: !:inline alert:!")
 
-(defvar org-fm-comment-regexp
+(defvar org-fm-inline-comment-regexp
   "\\(#\\(:\\||\\)\\)\\(.*?\\)\\(\\(:\\||\\)#\\)"
   "Regular expression for inline comments.
   Example: #:inline comment:#")
@@ -484,7 +484,7 @@ Inspired by: https://emacs.stackexchange.com/a/38367/12336"
 (defun org-fm-replace-questions-with-latex ()
   "Replace all open questions with LaTeX command \OpenQuestion."
   (save-excursion
-    (while (re-search-forward org-fm-question-regexp nil t)
+    (while (re-search-forward org-fm-inline-question-regexp nil t)
       (replace-match
        (let ((scope (match-string 3)))
          (concat "@@latex:\\\\OpenQuestion{@@" scope "@@latex:}@@"))))))
@@ -492,17 +492,17 @@ Inspired by: https://emacs.stackexchange.com/a/38367/12336"
 (defun org-fm-replace-inline-elements-with-latex ()
   "Replace all inline questions and comments with LaTeX commands."
   (save-excursion
-    (while (re-search-forward org-fm-question-regexp nil t)
+    (while (re-search-forward org-fm-inline-question-regexp nil t)
       (replace-match
        (let ((scope (match-string 3)))
          (concat "@@latex:\\\\OpenQuestion{@@" scope "@@latex:}@@")))))
   (save-excursion
-    (while (re-search-forward org-fm-alert-regexp nil t)
+    (while (re-search-forward org-fm-inline-alert-regexp nil t)
       (replace-match
        (let ((scope (match-string 3)))
          (concat "@@latex:\\\\Alert{@@" scope "@@latex:}@@")))))
   (save-excursion
-    (while (re-search-forward org-fm-comment-regexp nil t)
+    (while (re-search-forward org-fm-inline-comment-regexp nil t)
       (replace-match
        (let ((scope (match-string 3)))
          (concat "@@latex:\\\\Comment{@@" scope "@@latex:}@@"))))))
@@ -696,15 +696,15 @@ org-fm items."
   ;; Appearence
   (font-lock-add-keywords
    'org-mode
-   `((,org-fm-question-regexp
+   `((,org-fm-inline-question-regexp
       (1 '(font-lock-comment-face))
       (3 '(org-fm-question-face))
       (4 '(font-lock-comment-face)))
-     (,org-fm-alert-regexp
+     (,org-fm-inline-alert-regexp
       (1 '(font-lock-comment-face))
       (3 '(org-fm-alert-face))
       (4 '(font-lock-comment-face)))
-     (,org-fm-comment-regexp
+     (,org-fm-inline-comment-regexp
       (1 '(font-lock-comment-face))
       (3 '(org-fm-comment-face))
       (4 '(font-lock-comment-face)))
