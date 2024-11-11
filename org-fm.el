@@ -336,6 +336,12 @@ and replace abbreviations with names in the subsequent org-fm items."
   (if (libxml-available-p)
       (let* ((html-dom-tree (with-temp-buffer
                               (insert data)
+                              ;; Remove inline comments
+                              (save-excursion
+                                (beginning-of-buffer)
+                                (while (re-search-forward org-fm-inline-comment-regexp nil t)
+                                  (replace-match "")))
+                              ;; Generate DOM
                               (libxml-parse-html-region (point-min) (point-max))))
              (body-first-child (car (dom-children (car (dom-by-tag html-dom-tree 'body))))))
 
