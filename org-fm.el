@@ -5,7 +5,7 @@
 ;; Author: Timm Lichte <timm.lichte@uni-tuebingen.de>
 ;; URL: https://github.com/timmli/org-fm-dev/blob/master/org-fm.el
 ;; Version: 0
-;; Last modified: 2024-07-30 Tue 15:52:36
+;; Last modified: 2024-11-11 Mon 12:47:57
 ;; Package-Requires: ((org-mode "9"))
 ;; Keywords: Org
 
@@ -312,7 +312,7 @@ and replace abbreviations with names in the subsequent org-fm items."
   "Tweak participation/checkbox list in string DATA."
   (replace-regexp-in-string
    "<li.*?>\\(☐\\|☒\\)"
-   "<li style=\"list-style-type:none\">\\1"
+   "<li style=\"list-style-type:none\" class=\"fm-participant\">\\1"
    (replace-regexp-in-string
     "<code>\\[&#xa0;\\]</code>"
     "☐"
@@ -349,10 +349,12 @@ and replace abbreviations with names in the subsequent org-fm items."
              (body-first-child (car (dom-children (car (dom-by-tag html-dom-tree 'body))))))
 
         ;; Participants: When ul, for each li with a box, append the text of the children in grey.
+        ;; Assumes that org-fm-html-participant-list has been applied. 
         (when (eq (dom-tag body-first-child) 'ul)
           (cl-loop
            for node in (dom-children body-first-child)
-           when (eq (dom-tag (list node)) 'li) ; without (list node): Wrong type argument: listp, ""
+           when (and (eq (dom-tag (list node)) 'li) ; without (list node): Wrong type argument: listp, ""
+                     (eq (dom-attr (list node) 'class) "fm-participant"))
            do (cl-loop
                for node-child in (dom-children node)
                ;; Trim string child 
