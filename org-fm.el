@@ -5,7 +5,7 @@
 ;; Author: Timm Lichte <timm.lichte@uni-tuebingen.de>
 ;; URL: https://github.com/timmli/org-fm-dev/blob/master/org-fm.el
 ;; Version: 0
-;; Last modified: 2024-11-11 Mon 13:14:24
+;; Last modified: 2024-11-11 Mon 19:38:38
 ;; Package-Requires: ((org-mode "9"))
 ;; Keywords: Org
 
@@ -292,7 +292,7 @@ and replace abbreviations with names in the subsequent org-fm items."
    "<li>(no term) ::"
    "<li>"
    (replace-regexp-in-string
-    "<dt>\\([^<]+\\)</dt>[[:space:]]*<dd>\\([^<]+\\)"
+    "<dt>\\([^<]*?\\)</dt>[[:space:]]*<dd>\\(.*\\)"
     "<li>\\1 :: \\2"
     (replace-regexp-in-string
      "</dd>"
@@ -384,7 +384,8 @@ and replace abbreviations with names in the subsequent org-fm items."
         (cl-loop
          for node in (dom-by-tag html-dom-tree 'li)
          for text-child = (nth 2 node)
-         when (string-match "^[[:space:]]*\\(\\(\\(..?\\): \\)?.*::\\)\\( .*\\)" text-child)
+         when (and (stringp text-child)
+                   (string-match "^[[:space:]]*\\(\\(\\(..?\\): \\)?.*::\\)\\( .*\\)" text-child))
          do (let* ((type (match-string 3 text-child))
                    (header (match-string 1 text-child))
                    (body (match-string 4 text-child))
