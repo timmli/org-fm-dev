@@ -289,21 +289,24 @@ and replace abbreviations with names in the subsequent org-fm items."
 (defun org-fm-html-description-list-to-regular-list (data)
   "Convert HTML description list in string DATA to regular list."
   (replace-regexp-in-string
-   "<dt>\\([^<]+\\)</dt>[[:space:]]*<dd>\\([^<]+\\)"
-   "<li>\\1 :: \\2"
+   "<li>(no term) ::"
+   "<li>"
    (replace-regexp-in-string
-    "</dd>"
-    "</li>"
+    "<dt>\\([^<]+\\)</dt>[[:space:]]*<dd>\\([^<]+\\)"
+    "<li>\\1 :: \\2"
     (replace-regexp-in-string
-     "<dl.*?>"
-     "<ul class=\"org-ul\">"
+     "</dd>"
+     "</li>"
      (replace-regexp-in-string
-      "</dl>"
-      "</ul>" 
+      "<dl.*?>"
+      "<ul class=\"org-ul\">"
       (replace-regexp-in-string
-       "<li id=\"\\(.*?\\)\">"
-       "<li>\\1 :: "
-       data))))))
+       "</dl>"
+       "</ul>" 
+       (replace-regexp-in-string
+        "<li id=\"\\(.*?\\)\">"
+        "<li>\\1 :: "
+        data)))))))
 
 (defun org-fm-html-participant-list (data)
   "Tweak participation/checkbox list in string DATA."
