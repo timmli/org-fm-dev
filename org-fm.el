@@ -5,7 +5,7 @@
 ;; Author: Timm Lichte <timm.lichte@uni-tuebingen.de>
 ;; URL: https://github.com/timmli/org-fm-dev/blob/master/org-fm.el
 ;; Version: 0
-;; Last modified: 2024-11-11 Mon 12:47:57
+;; Last modified: 2024-11-11 Mon 13:14:24
 ;; Package-Requires: ((org-mode "9"))
 ;; Keywords: Org
 
@@ -373,7 +373,8 @@ and replace abbreviations with names in the subsequent org-fm items."
                                               ")</span>"))
                     (dom-remove-node html-dom-tree node-child)))
            ;; Replace li with div
-           when (eq (dom-tag (list node)) 'li)
+           when (and (eq (dom-tag (list node)) 'li) ; without (list node): Wrong type argument: listp, ""
+                     (eq (dom-attr (list node) 'class) "fm-participant"))
            do (progn (dom-add-child-before (dom-parent html-dom-tree node)
                                            (concat "<div>" (dom-text node) "</div>")
                                            node)
