@@ -5,7 +5,7 @@
 ;; Author: Timm Lichte <timm.lichte@uni-tuebingen.de>
 ;; URL: https://github.com/timmli/org-fm-dev/blob/master/org-fm.el
 ;; Version: 0
-;; Last modified: 2024-11-11 Mon 19:38:38
+;; Last modified: 2025-04-19 Sat 11:53:26
 ;; Package-Requires: ((org-mode "9"))
 ;; Keywords: Org
 
@@ -81,13 +81,21 @@
 (defun org-fm-make-regexp (cat)
   "Make regular expression for org-fm items of some category CAT."
   (concat
-   "^\\([[:blank:]]*\\)\\([0-9]+\)\\|-\\)"
+   ;; Indentation
+   "^\\([[:blank:]]*\\)"
+   ;; Enumerated or unenumerated
+   "\\([0-9]+\)\\|-\\)"
+   ;; Type
    "[[:blank:]]+\\("
    cat
+   ;; Timestamp
    "\\(?:[[:blank:]]*\\("
-   org-element--timestamp-regexp
+   org-ts-regexp-inactive
    "\\)\\)?"
-   "[[:blank:]]*\\(.*?\\)[[:blank:]]+\\(::\\|||\\)\\)[[:space:]]"))
+   ;; Names
+   "[[:blank:]]*\\(.*?\\)"
+   ;; Separator
+   "[[:blank:]]+\\(::\\|||\\)\\)[[:space:]]"))
 
 
 ;;====================
@@ -227,7 +235,7 @@
 
 (defun org-fm-expand-abbreviations ()
   "Fetch abbreviation hash from the PARTICIPANTS-LIST 
-and replace abbreviations with names in the subsequent org-fm items."
+  and replace abbreviations with names in the subsequent org-fm items."
   (save-excursion
     (setq counter 0) 
     (let ((abrv-hash
@@ -494,21 +502,13 @@ Inspired by: https://emacs.stackexchange.com/a/38367/12336"
   (org-show-subtree)
   (kill-line))
 
-(defun org-fm-replace-questions-with-latex ()
-  "Replace all open questions with LaTeX command \OpenQuestion."
-  (save-excursion
-    (while (re-search-forward org-fm-inline-question-regexp nil t)
-      (replace-match
-       (let ((scope (match-string 3)))
-         (concat "@@latex:\\\\OpenQuestion{@@" scope "@@latex:}@@"))))))
-
 (defun org-fm-replace-inline-elements-with-latex ()
   "Replace all inline questions and comments with LaTeX commands."
   (save-excursion
     (while (re-search-forward org-fm-inline-question-regexp nil t)
       (replace-match
        (let ((scope (match-string 3)))
-         (concat "@@latex:\\\\OpenQuestion{@@" scope "@@latex:}@@")))))
+         (concat "@@latex:\\\\InlineQuestion{@@" scope "@@latex:}@@")))))
   (save-excursion
     (while (re-search-forward org-fm-inline-alert-regexp nil t)
       (replace-match
@@ -524,7 +524,7 @@ Inspired by: https://emacs.stackexchange.com/a/38367/12336"
   "Replace all item tags with appropriate LaTeX commands."
   (save-excursion
     (while (re-search-forward
-            (org-fm-make-regexp "\\(A:\\|AC:\\|B:\\|C:\\|D:\\|E:\\|I:\\|N:\\|\\[ \\]\\|\\[X\\]\\)?")
+            (org-fm-make-regexp "\\(A:\\|AC:\\|B:\\|C:\\|D:\\|E:\\|I:\\|N:\\|Q:\\|\\[ \\]\\|\\[X\\]\\)?")
             nil t)
       (replace-match
        (let ((indentation (match-string 1))
@@ -543,16 +543,16 @@ Inspired by: https://emacs.stackexchange.com/a/38367/12336"
                           (concat " @@latex:\\\\ActionTag@@"))
                          ((or (string= cat "AC:") (string= cat "[X]"))
                           (concat " @@latex:\\\\ClearedTag@@"))
-                         ((string= cat "E:")
-                          (concat " @@latex:\\\\EntscheidungTag@@"))
+                         ((or (string= cat "B:") (string= cat "C:"))
+                          (concat " @@latex:\\\\ConsultationTag@@"))
                          ((string= cat "D:")
                           (concat " @@latex:\\\\DecisionTag@@"))
-                         ((or (string= cat "I:"))
-                          (concat " @@latex:\\\\InformationTag@@"))
-                         ((or (string= cat "C:") (string= cat "B:"))
-                          (concat " @@latex:\\\\ConsultationTag@@"))
+                         ((string= cat "E:")
+                          (concat " @@latex:\\\\EntscheidungTag@@"))
                          ((string= cat "N:")
                           (concat " @@latex:\\\\NoteTag{@@" time "@@latex:}@@"))
+                         ((string= cat "Q:")
+                          (concat " @@latex:\\\\QuestionTag@@"))
                          (t " @@latex:\\\\NoTag@@")
                          )
                    (concat "@@latex:{@@" name "@@latex:}@@"
@@ -565,15 +565,15 @@ Inspired by: https://emacs.stackexchange.com/a/38367/12336"
                           (concat " @@latex:\\\\ClearedTagMargin@@@@latex:{@@ "
                                   name
                                   "@@latex:}@@"))
-                         ((string= cat "E:")
-                          (concat " @@latex:\\\\EntscheidungTagMargin@@@@latex:{@@ "
-                                  name
-                                  "@@latex:}@@"))
                          ((string= cat "D:")
                           (concat " @@latex:\\\\DecisionTagMargin@@@@latex:{@@ "
                                   name
                                   "@@latex:}@@"))
-                         ((or (string= cat "I:"))
+                         ((string= cat "E:")
+                          (concat " @@latex:\\\\EntscheidungTagMargin@@@@latex:{@@ "
+                                  name
+                                  "@@latex:}@@"))
+                         ((string= cat "I:")
                           (concat " @@latex:\\\\InformationTagMargin@@@@latex:{@@ "
                                   name
                                   "@@latex:}@@"))

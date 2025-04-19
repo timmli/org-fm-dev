@@ -123,25 +123,29 @@
 \usepackage{tocloft}
 \renewcommand{\cftsecleader}{\cftdotfill{\cftdotsep}}
 
-\newcommand{\OpenQuestion}[1]{%
-  \colorbox{orange}{?} {\color{orange}#1}%
-  \addcontentsline{toc}{subsection}{%
-    \texorpdfstring{\colorbox{orange}{?} {\color{orange}#1}}{?: #1}}}
 \newcommand{\Alert}[1]{%
   {\color{red}#1}}%
 \newcommand{\ActionTag}[2]{%
   \addcontentsline{toc}{subsection}{\texorpdfstring{\colorbox{red}{A} #1}{A: #1}}%
   \colorbox{red}{A} #1 $#2$ }
 \newcommand{\ClearedTag}[2]{\colorbox{green!50!black}{AC} #1 $#2$ }
-\newcommand{\EntscheidungTag}[2]{%
-  \addcontentsline{toc}{subsection}{\texorpdfstring{\colorbox{green}{E}}{E:}}%
-  \colorbox{green}{E} #1 $#2$ }
+\newcommand{\ConsultationTag}[2]{\colorbox{blue!20}{C} #1 $#2$ }
 \newcommand{\DecisionTag}[2]{%
   \addcontentsline{toc}{subsection}{\texorpdfstring{\colorbox{green}{D}}{D}}%
   \colorbox{green}{D} #1 $#2$ }
+\newcommand{\EntscheidungTag}[2]{%
+  \addcontentsline{toc}{subsection}{\texorpdfstring{\colorbox{green}{E}}{E:}}%
+  \colorbox{green}{E} #1 $#2$ }
 \newcommand{\InformationTag}[2]{\colorbox{blue!20}{I} #1 $#2$ }
 \newcommand{\NoteTag}[3]{\colorbox{orange}{N} #1 #2 $#3$ }
-\newcommand{\ConsultationTag}[2]{\colorbox{blue!20}{C} #1 $#2$ }
+\newcommand{\QuestionTag}[2]{%
+  \addcontentsline{toc}{subsection}{%
+    \texorpdfstring{\colorbox{orange}{?} {\color{orange} Open question about the minutes}}{?}}%
+    \colorbox{orange}{?} #1 $#2$}
+\newcommand{\InlineQuestion}[1]{%
+  \colorbox{orange}{?} {\color{orange}#1}%
+  \addcontentsline{toc}{subsection}{%
+    \texorpdfstring{\colorbox{orange}{?} {\color{orange}#1}}{?: #1}}}
 \newcommand{\NoTag}[2]{#1 $#2$ }
 \newcommand{\Comment}[1]{}
 

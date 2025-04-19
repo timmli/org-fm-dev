@@ -17,6 +17,7 @@
 :PARTICIPANTS-LIST:
 - [X] John Doe [JD=John]
 - [X] Kim Miller [KM]
+      - online
 - [X] Susan Parker [SP=Sue]
 - [ ] Peter Smith [PS=Pete]
 - [X] Alexandra West
@@ -27,10 +28,10 @@
        - [ ] :: Again something to do.
        - E: :: Decision made
 2) A second TOP 
-       - AC: Alexandra :: Cleared item
+       - AC: [2025-04-19 Sat 11:08] Alexandra :: Cleared item
        - [X] :: Another cleared item 
        - C: :: Consultation ?:Open question regarding minutes:?
-             - Q: :: There also an item type for open questions regarding minutes.  
+             - Q: :: There is also an item type for open questions regarding minutes.  
              - SP :: Sue's idea
              - KM :: Kim's question
        - N: [2020-06-03 Mi 10:39] :: This is a note. Outside the protocol or added later (with timestamp).

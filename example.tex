@@ -1,16 +1,14 @@
-% Created 2021-09-29 Wed 17:23
+% Created 2025-04-19 Sat 12:15
 % Intended LaTeX compiler: pdflatex
 \documentclass[11pt]{article}
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
 \usepackage{graphicx}
-\usepackage{grffile}
 \usepackage{longtable}
 \usepackage{wrapfig}
 \usepackage{rotating}
 \usepackage[normalem]{ulem}
 \usepackage{amsmath}
-\usepackage{textcomp}
 \usepackage{amssymb}
 \usepackage{capt-of}
 \usepackage{hyperref}
@@ -19,8 +17,8 @@
 \chair{Sue Parker}
 \event{Some event}
 \place{Some place}
-\drafttext{DRAFT of \the\day.\the\month.\the\year \currenttime}
-\participants{\begin{itemize}\item[{$\boxtimes$}] John Doe\item[{$\boxtimes$}] Kim Miller\item[{$\boxtimes$}] Susan Parker\item[{$\square$}] Peter Smith\item[{$\boxtimes$}] Alexandra West\end{itemize}}
+\drafttext{DRAFT of \the\day.\the\month.\the\year\ \currenttime}
+\participants{\begin{itemize}\item[{$\boxtimes$}] John Doe\item[{$\boxtimes$}] Kim Miller \begin{itemize}\item online\end{itemize}\item[{$\boxtimes$}] Susan Parker\item[{$\square$}] Peter Smith\item[{$\boxtimes$}] Alexandra West\end{itemize}}
 \author{John Doe}
 \date{03.06.2020, 12:15--13:45}
 \title{Minutes}
@@ -29,33 +27,34 @@
  pdftitle={Minutes},
  pdfkeywords={},
  pdfsubject={},
- pdfcreator={Emacs 27.1 (Org mode 9.4.6)}, 
+ pdfcreator={Emacs 29.4 (Org mode 9.7.27)}, 
  pdflang={English}}
 \begin{document}
 
 \maketitle
 \tableofcontents
 
-
 \section{\texorpdfstring{\InformationTagTOPMargin{John, Miller, Sue, Pete}}{}A first TOP}
-\label{sec:orge8e7c9c}
+\label{sec:orgeaec009}
 \begin{itemize}
 \item \ActionTag{Sue}{::} \ActionTagMargin{Sue}Something to do.
 \item \ActionTag{}{::} \ActionTagMargin{}Again something to do.
 \item \EntscheidungTag{}{::} \EntscheidungTagMargin{ }Decision made
 \end{itemize}
 \section{A second TOP}
-\label{sec:org20ad65b}
+\label{sec:orgd0e3582}
 \begin{itemize}
 \item \ClearedTag{Alexandra}{::} \ClearedTagMargin{ Alexandra}Cleared item
 \item \ClearedTag{}{::} \ClearedTagMargin{ }Another cleared item
-\item \ConsultationTag{}{::} \ConsultationTagMargin{ }Consultation \OpenQuestion{Open question regarding minutes}
+\item \ConsultationTag{}{::} \ConsultationTagMargin{ }Consultation \InlineQuestion{Open question regarding minutes}
 \begin{itemize}
+\item \QuestionTag{}{::}There is also an item type for open questions regarding minutes.
 \item \NoTag{Sue}{::}Sue's idea
 \item \NoTag{Miller}{::}Kim's question
 \end{itemize}
-\item \NoteTag{\textit{[2020-06-03 Wed 10:39]}}{}{::}This is a note. Outside the protocol or added later (with timestamp).
+\item \NoteTag{\textit{{[}2020-06-03 Wed 10:39]}}{}{::}This is a note. Outside the protocol or added later (with timestamp).
 \item The expansion of abbreviations can be escaped with \#{}\#: JD
 \item Inline comments can be included like this: \Comment{This is an inline comment.}
+\item Example for an \Alert{inline alert}
 \end{itemize}
 \end{document}
