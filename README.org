@@ -34,11 +34,12 @@ which means:
    | <TYPE>   | description           |
    |----------+-----------------------|
    | =A:=, =[ ]=  | action/agenda         |
-   | =D:=, =E:=   | decision/Entscheidung |
-   | =I:=       | information           |
-   | =C:=, =B:=   | consultation/Beratung |
-   | =N:=       | note                  |
    | =AC:=, =[X]= | cleared               |
+   | =D:=, =E:=   | decision/Entscheidung |
+   | =C:=, =B:=   | consultation/Beratung |
+   | =I:=       | information           |
+   | =N:=       | note                  |
+   | =Q:=       | open question about minutes |
 - =<TIMESTAMP>= is an (inactive) =org-timestamp=.
 - =<NAMES>= is a comma-separated list of participant names.
 - =<SEPARATOR>= can be =::= or =||=.
@@ -53,6 +54,7 @@ which means:
 |---------------------------+------------------------|
 | enclosed by =?:= and =:?= | question about minutes |
 | enclosed by =#:= and =:#= | private comment        |
+| enclosed by =!:= and =:!= | alert   |
 
 *** Keywords
 
@@ -73,6 +75,15 @@ There is a number of special =org-fm= keywords that are used during export:
 | =#+MINUTES_OPTIONS:=      | used as =#+OPTIONS:=                      |
 
 Participants can be included using the drawer =:PARTICIPANTS-LIST:= which is assumed to contain exactly one list. The content of =:PARTICIPANTS-LIST:= will overwrite =#+MINUTES_PARTICIPANTS:=.
+
+The schema of the participation list looks like this:
+
+#+BEGIN_EXAMPLE
+- <CHECKBOX> <NAME> [<ABBREVIATION>]
+  - <COMMENT>?
+#+END_EXAMPLE
+
+Note that, currently, *only one* comment item per participant is supported when exporting to LaTeX.
 
 *** Automatic abbreviation expansion
 
