@@ -1,4 +1,5 @@
 
+
 * org-fm
 
 =org-fm= supports taking and exporting minutes in =org-mode= files. =org-fm= assumes a very simple but effective minutes format consisting of plain lists, where list items can be typed and assigned to participants using the dictionary notation of =org-mode= lists. 
@@ -12,6 +13,23 @@ Example of PDF export via LaTeX:
 [[file:example-latex-export.png]]
 
 ** Installation
+
+*** Installation with Melpa
+
+Not yet available.
+
+*** Installation from Github
+
+Download =org-fm.el= to your =.emacs.d= folder and add the following code to your init file:
+
+#+BEGIN_SRC emacs-lisp
+(use-package org-fm
+  :load-path "relative/path/to/org-fm/"
+	:config
+	(org-fm-minor-mode))
+#+END_SRC
+
+For LaTeX export, you will also need =org-fm-latex-style-plain.tex=.
 
 ** Usage
 
@@ -45,6 +63,18 @@ which means:
 - =<SEPARATOR>= can be =::= or =||=.
 - When =<TYPE>=, =<TIMESTAMP>= or =<NAMES>= are given, there also has to be a =<SEPARATOR>=.
 - When =<NAMES>= but not =<TYPE>= is given, the implicit type will be =I:= (information).
+
+**** Timestamps
+
+Items may contain an inactive =org-timestamp=, which is located after =<TYPE>= and before =<NAMES>=:
+
+#+BEGIN_EXAMPLE
+- N: [2020-06-08 Mo 12:18] :: This is a note.
+#+END_EXAMPLE 
+
+Timestamps can be inserted or updated with =org-fm-add-or-update-timestamp=.
+
+Timestamps are not exported with =org-fm-export= except for the note type (=N:=).
 
 *** Inline elements
 
@@ -109,18 +139,6 @@ See [[file:example.org][example.org]].
 The export is triggered with =org-fm-export=.
 
 =org-fm-export= will first copy the content of the =org-mode= heading at point into a temporary buffer, perform a couple of replacements and then call =org-export-dispatch=. 
-
-*** Timestamps
-
-Items may contain an inactive =org-timestamp=, which is located after =<TYPE>= and before =<NAMES>=:
-
-#+BEGIN_EXAMPLE
-- N: [2020-06-08 Mo 12:18] :: This is a note.
-#+END_EXAMPLE 
-
-Timestamps can be inserted or updated with =org-fm-add-or-update-timestamp=.
-
-Timestamps are not exported with =org-fm-export= except for the note type (=N:=).
 
 ** Plans
 

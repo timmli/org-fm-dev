@@ -1,11 +1,11 @@
 ;;; org-fm.el --- fast minutes with org-fm -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2024 Timm Lichte
+;; Copyright (C) 2025 Timm Lichte
 
 ;; Author: Timm Lichte <timm.lichte@uni-tuebingen.de>
 ;; URL: https://github.com/timmli/org-fm-dev/blob/master/org-fm.el
 ;; Version: 0
-;; Last modified: 2025-04-19 Sat 12:49:28
+;; Last modified: 2025-04-19 Sat 21:31:01
 ;; Package-Requires: ((org-mode "9"))
 ;; Keywords: Org
 
