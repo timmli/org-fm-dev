@@ -5,7 +5,7 @@
 ;; Author: Timm Lichte <timm.lichte@uni-tuebingen.de>
 ;; URL: https://github.com/timmli/org-fm-dev/blob/master/org-fm.el
 ;; Version: 0
-;; Last modified: 2025-04-19 Sat 11:53:26
+;; Last modified: 2025-04-19 Sat 12:49:28
 ;; Package-Requires: ((org-mode "9"))
 ;; Keywords: Org
 
@@ -625,7 +625,14 @@ Inspired by: https://emacs.stackexchange.com/a/38367/12336"
         (progn (forward-line 1)
                (beginning-of-line)
                (if (eq (car (org-element-at-point)) 'plain-list)
-                   (replace-regexp-in-string "\n" "" (org-list-to-latex (org-list-to-lisp)))
+                   ;; Assumption: every participant item has a checkbox!
+                   ;; Items without checkboxes are removed an their content
+                   ;; concatenated to the parent item.
+                   (replace-regexp-in-string
+                    "\\\\begin{itemize}\\\\item \\(.*?\\)\\\\end{itemize}"
+                    " {\\\\color{gray}(\\1)}" 
+                    (replace-regexp-in-string "\n" ""
+                                              (org-list-to-latex (org-list-to-lisp))))
                  ""))
       ""
       )))
