@@ -9,7 +9,7 @@ Emacs screenshot:
 
 Example of PDF export via LaTeX:
 
-[[file:example-export.png]]
+[[file:example-latex-export.png]]
 
 ** Installation
 
