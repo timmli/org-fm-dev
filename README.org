@@ -25,8 +25,8 @@ Download =org-fm.el= to your =.emacs.d= folder and add the following code to you
 #+BEGIN_SRC emacs-lisp
 (use-package org-fm
   :load-path "relative/path/to/org-fm/"
-	:config
-	(org-fm-minor-mode))
+  :config
+  (org-fm-minor-mode))
 #+END_SRC
 
 For LaTeX export, you will also need =org-fm-latex-style-plain.tex=.
